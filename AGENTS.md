@@ -40,6 +40,6 @@ Curso de inglês para adultos brasileiros com noção básica (verbo to be e alg
 
 ## Publicar
 - GitHub: `rafaelveigaexodus-stack/passaporte-ingles`, branch `main`.
-- Render: site estático `ingles-acelerado` (`srv-dbl7o956e07s739b7iug`), endereço https://ingles-acelerado.onrender.com, build `node test/conteudo.test.js`, pasta publicada `public`. Publica sozinho a cada push.
+- Render: site estático `ingles-acelerado` (`srv-dbl7o956e07s739b7iug`), endereço https://ingles-acelerado.onrender.com, build `node test/conteudo.test.js`, pasta publicada `public`. O deploy automático por push NÃO dispara: depois do push, dispare com `trigger_deploy`.
 - O site antigo `passaporte-ingles` (`srv-dbl7hoff3r2c73dqqil0`) ficou sobrando: pode ser apagado no painel do Render.
 - Depois do push, confira o deploy no Render (`list_deploys`) e peça para testar com Ctrl+F5.
