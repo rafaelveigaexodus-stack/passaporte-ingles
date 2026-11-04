@@ -1,0 +1,744 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Inglês Acelerado</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: colorful hero for the current level (an everyday setting), then five level bands, each with four skill cards; lessons open full screen in the skill's color. */
+:root{
+  --bg:#F5F3FA; --surface:#FFFFFF; --surface-2:#F4F2F9; --ink:#17142B; --muted:#5F5A78; --line:#E2DEEE;
+  --accent:#6A3CF5; --accent-ink:#FFFFFF; --accent-soft:#ECE6FF;
+  --gold:#E09A12; --gold-soft:#FFF1D6;
+  --good:#12A066; --good-soft:#DDF6EA; --bad:#E0413A; --bad-soft:#FDE4E2;
+  --c-read:#2F6BFF; --c-read-soft:#E5EDFF; --c-write:#8A3FFC; --c-write-soft:#F0E6FF;
+  --c-listen:#FF7A1A; --c-listen-soft:#FFEEDD; --c-speak:#00A87E; --c-speak-soft:#DBF5EC;
+  --blob1:rgba(255,122,26,.14); --blob2:rgba(138,63,252,.13); --blob3:rgba(0,168,126,.11);
+  --shadow:0 1px 2px rgba(23,20,43,.06),0 10px 28px rgba(23,20,43,.08);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Figtree","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F0D1C; --surface:#1A1730; --surface-2:#221E3C; --ink:#EEEBFA; --muted:#A49EC2; --line:#2F2A4D;
+  --accent:#9B7BFF; --accent-ink:#0F0D1C; --accent-soft:#2A2250;
+  --gold:#FFC04D; --gold-soft:#3A2C12;
+  --good:#37D394; --good-soft:#123426; --bad:#FF6B63; --bad-soft:#3E1A1C;
+  --c-read:#6E95FF; --c-read-soft:#18244E; --c-write:#B184FF; --c-write-soft:#2A1C4A;
+  --c-listen:#FF9A4D; --c-listen-soft:#3C2613; --c-speak:#34D3A4; --c-speak-soft:#10352B;
+  --blob1:rgba(255,122,26,.10); --blob2:rgba(138,63,252,.16); --blob3:rgba(0,168,126,.09);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F0D1C; --surface:#1A1730; --surface-2:#221E3C; --ink:#EEEBFA; --muted:#A49EC2; --line:#2F2A4D;
+  --accent:#9B7BFF; --accent-ink:#0F0D1C; --accent-soft:#2A2250;
+  --gold:#FFC04D; --gold-soft:#3A2C12;
+  --good:#37D394; --good-soft:#123426; --bad:#FF6B63; --bad-soft:#3E1A1C;
+  --c-read:#6E95FF; --c-read-soft:#18244E; --c-write:#B184FF; --c-write-soft:#2A1C4A;
+  --c-listen:#FF9A4D; --c-listen-soft:#3C2613; --c-speak:#34D3A4; --c-speak-soft:#10352B;
+  --blob1:rgba(255,122,26,.10); --blob2:rgba(138,63,252,.16); --blob3:rgba(0,168,126,.09);
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.4); color-scheme:dark}
+
+/* one gradient per setting (same in both themes: white text sits on it) */
+.env-0{--env:linear-gradient(125deg,#FF8A3D 0%,#FF4F7B 100%);--env-solid:#FF5F6A}
+.env-1{--env:linear-gradient(125deg,#FF4FA3 0%,#8A3FFC 100%);--env-solid:#C046D6}
+.env-2{--env:linear-gradient(125deg,#E8364F 0%,#FF9F1C 100%);--env-solid:#F0623A}
+.env-3{--env:linear-gradient(125deg,#06B6C9 0%,#1FB863 100%);--env-solid:#0FB497}
+.env-4{--env:linear-gradient(125deg,#2F6BFF 0%,#4B2FC0 100%);--env-solid:#3D4FE0}
+
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  background:
+   radial-gradient(600px 420px at 8% -5%,var(--blob1),transparent 70%),
+   radial-gradient(700px 500px at 100% 18%,var(--blob2),transparent 70%),
+   radial-gradient(640px 520px at 30% 100%,var(--blob3),transparent 70%),var(--bg);
+  background-attachment:fixed;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 48px}
+button{font:inherit;color:inherit}
+button:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1060px;margin:0 auto}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* top bar */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 0;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:800;font-size:21px}
+.brand .logo{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;color:#fff;font-family:var(--f-display);font-weight:800;font-size:15px;
+  background:conic-gradient(from 200deg,var(--c-read),var(--c-write),var(--c-listen),var(--c-speak),var(--c-read))}
+.stats{display:flex;gap:8px;flex-wrap:wrap}
+.stat{display:flex;align-items:center;gap:6px;border-radius:999px;padding:7px 13px;font-size:14px;font-weight:600}
+.stat b{font-family:var(--f-mono);font-weight:600;color:var(--ink)}
+.stat svg{width:16px;height:16px}
+.s-pts{background:var(--c-read-soft);color:var(--c-read)}
+.s-fire{background:var(--c-listen-soft);color:var(--c-listen)}
+.s-rank{background:var(--c-speak-soft);color:var(--c-speak)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1fr 280px;gap:14px;margin-top:4px}
+.hero-main{background:var(--env);color:#fff;border-radius:24px;padding:28px;display:grid;gap:18px;position:relative;overflow:hidden;min-width:0;box-shadow:var(--shadow)}
+.hero-main .big-ico{position:absolute;right:-18px;bottom:-26px;width:190px;height:190px;color:rgba(255,255,255,.18)}
+.hero-main .big-ico svg{width:100%;height:100%}
+.hero-main > *{position:relative}
+.pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.22);color:#fff;font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:5px 11px;border-radius:99px;width:max-content}
+.hero-title{font-size:clamp(34px,6vw,54px);font-weight:800;line-height:1;letter-spacing:-.02em}
+.hero-sub{color:rgba(255,255,255,.9);max-width:52ch;margin-top:8px;font-size:16px}
+.hbar{height:10px;background:rgba(255,255,255,.28);border-radius:99px;overflow:hidden}
+.hbar i{display:block;height:100%;background:#fff;border-radius:99px;transition:width .6s ease}
+.hero-meta{display:flex;justify-content:space-between;font-size:13px;color:rgba(255,255,255,.9);margin-bottom:6px}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:13px 20px;font-weight:700;cursor:pointer;background:var(--accent);color:var(--accent-ink);transition:transform .12s ease,filter .12s ease}
+.btn:hover{filter:brightness(1.07)}.btn:active{transform:translateY(1px)}
+.btn[disabled]{opacity:.4;cursor:not-allowed;filter:none}
+.btn.white{background:#fff;color:#1b1630;box-shadow:0 8px 20px -8px rgba(0,0,0,.35)}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.good{background:var(--good);color:#fff}
+.btn.bad{background:var(--bad);color:#fff}
+.side{display:grid;gap:12px;align-content:start}
+.tile-stat{background:var(--surface);border-radius:var(--r);padding:16px 18px;box-shadow:var(--shadow);display:grid;gap:6px}
+.tile-stat strong{font-family:var(--f-mono);font-size:18px}
+.ring-row{display:flex;align-items:center;gap:14px}
+.ring{width:64px;height:64px;flex:none}
+.bar{height:8px;background:var(--surface-2);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;transition:width .6s ease}
+
+/* method */
+.method{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 6px}
+.mcard{background:var(--surface);border-radius:var(--r);padding:16px 18px;box-shadow:0 1px 2px rgba(23,20,43,.05)}
+.mcard h3{font-size:16px;margin:4px 0}
+.mcard p{margin:0;color:var(--muted);font-size:14px}
+.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:middle}
+
+/* levels */
+.level{margin-top:30px}
+.level-band{display:flex;align-items:center;gap:14px;background:var(--env);color:#fff;border-radius:18px;padding:14px 18px;margin-bottom:12px;flex-wrap:wrap}
+.level-band .l-ico{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.22);display:grid;place-items:center;flex:none}
+.level-band .l-ico svg{width:26px;height:26px}
+.level-band h2{font-size:clamp(20px,3vw,26px)}
+.level-band .l-sub{font-size:14px;color:rgba(255,255,255,.88)}
+.level-band .l-txt{flex:1;min-width:0}
+.level-band .l-score{font-family:var(--f-mono);font-size:13px;background:rgba(255,255,255,.2);padding:5px 11px;border-radius:99px}
+.level.locked .level-band{filter:grayscale(.85);opacity:.55}
+.level.locked .gates{opacity:.6}
+.gates{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.gate{text-align:left;background:linear-gradient(160deg,var(--gs) 0%,var(--surface) 62%);border:2px solid transparent;border-radius:var(--r);padding:16px;display:grid;gap:10px;cursor:pointer;transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease;min-width:0;box-shadow:0 1px 2px rgba(23,20,43,.05)}
+.gate:hover:not([disabled]){transform:translateY(-2px);border-color:var(--gc);box-shadow:var(--shadow)}
+.gate[disabled]{cursor:not-allowed;background:var(--surface)}
+.gate .g-top{display:flex;justify-content:space-between;align-items:center}
+.gate .g-ico{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--gc);color:#fff;box-shadow:0 6px 14px -6px var(--gc)}
+.gate[disabled] .g-ico{background:var(--surface-2);color:var(--muted);box-shadow:none}
+.gate .g-ico svg{width:20px;height:20px}
+.gate h3{font-size:18px}
+.gate p{margin:0;font-size:13px;color:var(--muted)}
+.gate.next{border-color:var(--gc);box-shadow:0 0 0 4px var(--gs)}
+.tag{font-size:11px;font-weight:700;padding:3px 9px;border-radius:99px;background:var(--gc);color:#fff}
+.lock{color:var(--muted)} .lock svg{width:16px;height:16px}
+.stars{display:flex;gap:3px}
+.stars svg{width:18px;height:18px}
+.star-on{fill:var(--gold)} .star-off{fill:var(--line)}
+
+/* lesson overlay: takes the color of its skill */
+.lesson{--accent:var(--sk);--accent-soft:var(--sk-soft);--accent-ink:#fff;
+  position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;overflow:auto;
+  background:radial-gradient(760px 400px at 50% -12%,var(--sk-soft),transparent 75%),var(--bg);
+  padding-top:env(safe-area-inset-top,0px)}
+.l-top{display:flex;align-items:center;gap:14px;padding:14px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));max-width:760px;width:100%;margin:0 auto}
+.x{border:0;background:transparent;cursor:pointer;padding:6px;border-radius:8px;color:var(--muted)}
+.x svg{width:22px;height:22px}
+.l-top .bar{flex:1;height:12px}
+.l-top .bar i{background:linear-gradient(90deg,var(--sk),var(--gold))}
+.combo{font-family:var(--f-mono);font-size:13px;font-weight:600;color:var(--gold);min-width:64px;text-align:right}
+.l-body{flex:1;max-width:760px;width:100%;margin:0 auto;padding:10px max(16px,env(safe-area-inset-right,0px)) 24px max(16px,env(safe-area-inset-left,0px));display:grid;align-content:start;gap:18px}
+.l-foot{position:sticky;bottom:0;border-top:1px solid var(--line);background:var(--surface);padding:16px max(16px,env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.l-foot.ok{background:var(--good-soft);border-color:var(--good)}
+.l-foot.no{background:var(--bad-soft);border-color:var(--bad)}
+.l-foot-in{max-width:760px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.fb{min-width:0;flex:1}
+.fb h3{font-size:20px}
+.l-foot.ok .fb h3{color:var(--good)} .l-foot.no .fb h3{color:var(--bad)}
+.fb p{margin:2px 0 0;font-size:14px}
+.q-kind{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.skill-badge{display:inline-flex;align-items:center;gap:8px;background:var(--sk);color:#fff;border-radius:99px;padding:5px 12px 5px 6px;font-weight:700;font-size:13px}
+.skill-badge i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.22)}
+.skill-badge svg{width:14px;height:14px}
+.env-badge{display:inline-flex;align-items:center;gap:6px;background:var(--env);color:#fff;border-radius:99px;padding:5px 12px;font-weight:600;font-size:13px}
+.q-title{font-size:clamp(20px,3.6vw,26px);font-weight:700}
+.card{background:var(--surface);border-radius:var(--r);padding:18px 20px;box-shadow:var(--shadow)}
+.dialog{font-size:18px;line-height:1.65;white-space:pre-line}
+.dialog .who{font-family:var(--f-mono);font-size:13px;color:var(--sk);font-weight:600}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 13px;font-size:14px;font-weight:600;cursor:pointer}
+.chip svg{width:16px;height:16px;color:var(--sk)}
+.chip:hover{border-color:var(--sk)}
+.chip .cost{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.translation{color:var(--muted);font-size:15px;border-left:3px solid var(--gold);padding-left:12px;white-space:pre-line}
+.prompt{font-size:19px;font-weight:600}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;border:2px solid var(--line);background:var(--surface);border-radius:14px;padding:14px 16px;font-size:16px;font-weight:500;cursor:pointer;display:flex;gap:12px;align-items:center}
+.opt .k{font-family:var(--f-mono);font-size:12px;border:1px solid var(--line);border-radius:6px;padding:1px 7px;color:var(--muted);flex:none}
+.opt:hover:not([disabled]){border-color:var(--sk)}
+.opt.sel{border-color:var(--sk);background:var(--sk-soft)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.answer-zone{min-height:62px;border-bottom:2px dashed var(--line);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;align-content:flex-start}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;padding-top:6px}
+.tile{border:1.5px solid var(--line);border-bottom:3px solid var(--sk);background:var(--surface);border-radius:10px;padding:9px 14px;font-size:17px;font-weight:600;cursor:pointer}
+.tile:hover{border-color:var(--sk)}
+.answer-zone .tile{background:var(--sk-soft);border-color:var(--sk)}
+.tile.used{visibility:hidden}
+textarea{width:100%;min-height:110px;resize:vertical;border:2px solid var(--line);border-radius:14px;padding:14px;font:inherit;font-size:18px;background:var(--surface);color:var(--ink)}
+textarea:focus{outline:none;border-color:var(--sk)}
+.play-row{display:flex;gap:14px;justify-content:center;align-items:center;padding:8px 0}
+.play{width:92px;height:92px;border-radius:26px;border:0;background:var(--sk);color:#fff;cursor:pointer;display:grid;place-items:center;box-shadow:0 12px 26px -10px var(--sk)}
+.play svg{width:40px;height:40px}
+.play.slow{width:64px;height:64px;border-radius:18px;background:var(--sk-soft);color:var(--sk);box-shadow:none}
+.play.slow svg{width:28px;height:28px}
+.subtitle{text-align:center;font-size:18px;font-weight:600}
+.speak-phrase{font-family:var(--f-display);font-size:clamp(26px,5vw,36px);font-weight:700;line-height:1.2}
+.pron{font-family:var(--f-mono);font-size:15px;color:var(--gold);background:var(--gold-soft);display:inline-block;padding:4px 10px;border-radius:8px}
+.mic{width:96px;height:96px;border-radius:50%;border:0;background:var(--bad);color:#fff;cursor:pointer;display:grid;place-items:center;margin:0 auto;box-shadow:0 14px 30px -12px var(--bad)}
+.mic svg{width:40px;height:40px}
+.mic.on{animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 var(--bad-soft)}70%{box-shadow:0 0 0 22px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.heard{text-align:center;color:var(--muted);font-size:15px;min-height:22px}
+.self{display:grid;grid-template-columns:1fr 1fr;gap:10px;flex:1;max-width:360px}
+.note{font-size:13px;color:var(--muted);text-align:center}
+.chunks{display:grid;gap:10px}
+.chunk{display:flex;align-items:center;gap:14px;background:var(--surface);border-radius:14px;padding:12px 14px;box-shadow:0 1px 2px rgba(23,20,43,.05)}
+.chunk .sp{flex:none;width:44px;height:44px;border-radius:12px;border:0;display:grid;place-items:center;cursor:pointer}
+.chunk .sp svg{width:20px;height:20px}
+.chunk:nth-child(5n+1) .sp{background:var(--c-read-soft);color:var(--c-read)}
+.chunk:nth-child(5n+2) .sp{background:var(--c-write-soft);color:var(--c-write)}
+.chunk:nth-child(5n+3) .sp{background:var(--c-listen-soft);color:var(--c-listen)}
+.chunk:nth-child(5n+4) .sp{background:var(--c-speak-soft);color:var(--c-speak)}
+.chunk:nth-child(5n+5) .sp{background:var(--gold-soft);color:var(--gold)}
+.chunk .en{font-weight:700;font-size:17px}
+.chunk .pt{color:var(--muted);font-size:14px}
+.chunk > div{min-width:0}
+
+/* results */
+.result{text-align:center;display:grid;gap:16px;justify-items:center;padding-top:20px}
+.big-stars{display:flex;gap:10px}
+.big-stars svg{width:60px;height:60px}
+.big-stars svg.pop{animation:pop .5s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes pop{from{transform:scale(0) rotate(-30deg)}to{transform:scale(1) rotate(0)}}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:460px}
+.res-grid div{border-radius:14px;padding:12px}
+.res-grid div:nth-child(1){background:var(--c-speak-soft)}
+.res-grid div:nth-child(2){background:var(--gold-soft)}
+.res-grid div:nth-child(3){background:var(--c-write-soft)}
+.res-grid strong{display:block;font-family:var(--f-mono);font-size:22px}
+.res-grid span{font-size:12px;color:var(--muted)}
+.seal{display:flex;align-items:center;gap:10px;background:var(--env);color:#fff;border-radius:99px;padding:8px 16px 8px 8px;font-weight:700}
+.seal i{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.25);display:grid;place-items:center}
+.seal svg{width:20px;height:20px}
+.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:60}
+.confetti i{position:absolute;top:-14px;width:9px;height:14px;border-radius:2px;animation:fall 2.4s cubic-bezier(.2,.6,.4,1) forwards}
+@keyframes fall{to{transform:translate3d(var(--dx),110vh,0) rotate(var(--rot));opacity:.9}}
+
+.foot-note{margin-top:40px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.linkish{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr}
+  .side{grid-template-columns:repeat(3,1fr)}
+  .gates{grid-template-columns:repeat(2,1fr)}
+  .method{grid-template-columns:1fr;gap:10px}
+}
+@media (max-width:560px){.side{grid-template-columns:1fr}}
+@media (max-width:420px){.gate{padding:13px}.gate h3{font-size:16px}.hero-main{padding:22px 18px}.level-band .l-score{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap" id="home"></div>
+<div class="lesson" id="lesson" hidden></div>
+
+<script>
+(function(){
+"use strict";
+/* ---------- icons ---------- */
+const sv=p=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const I={
+ read:sv('<path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2zM22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/>'),
+ write:sv('<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4z"/>'),
+ ear:sv('<path d="M3 14v-2a9 9 0 0 1 18 0v2"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h3zM3 15a2 2 0 0 0 2 2h1v-5H3z"/>'),
+ mic:sv('<rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v1a7 7 0 0 0 14 0v-1M12 18v4"/>'),
+ sound:sv('<path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>'),
+ turtle:sv('<path d="M4 15a8 6 0 0 1 16 0z"/><path d="M20 13h1.5a1.5 1.5 0 0 0 0-3H19M7 15l-1 3M17 15l1 3"/>'),
+ eye:sv('<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>'),
+ close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+ lock:sv('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+ fire:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s5 4.5 5 10a5 5 0 0 1-10 0c0-2 1-3.5 1-3.5S9 11 10.5 11C10.5 7 12 2 12 2z"/></svg>',
+ bolt:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h7l-1 8 9-12h-7z"/></svg>',
+ badge:sv('<circle cx="12" cy="9" r="6"/><path d="m8.5 14-1.5 8 5-3 5 3-1.5-8"/>'),
+ family:sv('<path d="M3 11 12 4l9 7"/><path d="M5 10v10h14V10"/><circle cx="10" cy="14" r="1.6"/><circle cx="14.5" cy="15" r="1.2"/><path d="M8 20v-2a2 2 0 0 1 4 0v2M13 20v-1.5a1.5 1.5 0 0 1 3 0V20"/>'),
+ shop:sv('<path d="M5 8h14l-1 13H6z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>'),
+ food:sv('<path d="M7 2v9a2 2 0 0 0 2 2v9M5 2v6a2 2 0 0 0 2 2M11 2v6a2 2 0 0 1-2 2"/><path d="M17 22V2c-2 1-3 4-3 8h3"/>'),
+ fun:sv('<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'),
+ work:sv('<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>'),
+};
+const star=(on,cls)=>`<svg viewBox="0 0 24 24"${cls?` class="${cls}"`:""}><path class="${on?"star-on":"star-off"}" d="m12 2 2.9 6.3 6.9.7-5.2 4.6 1.5 6.8L12 17l-6.1 3.4 1.5-6.8L2.2 9l6.9-.7z"/></svg>`;
+const SKILLS=[
+ {key:"read",name:"Leitura",ico:I.read,desc:"Diálogos curtos para entender o sentido"},
+ {key:"write",name:"Escrita",ico:I.write,desc:"Monte frases com blocos prontos"},
+ {key:"listen",name:"Audição",ico:I.ear,desc:"Ouça e reconheça o que foi dito"},
+ {key:"speak",name:"Fala",ico:I.mic,desc:"Repita em voz alta, no ritmo nativo"},
+];
+SKILLS.forEach(s=>{s.c=`var(--c-${s.key})`;s.soft=`var(--c-${s.key}-soft)`;});
+
+/* ---------- course content: one setting per level ---------- */
+const LEVELS=[
+{env:"Família",ico:I.family,sub:"Apresentar a família, falar de idade, casa e rotina com o verbo to be e have.",
+ phases:{
+ read:{chunks:[["This is my wife / husband.","Esta é minha esposa / este é meu marido."],["How old are they?","Quantos anos eles têm?"],["He's married.","Ele é casado."],["She's older than me.","Ela é mais velha que eu."],["We have lunch at my mom's.","Almoçamos na casa da minha mãe."]],
+  items:[
+  {t:"read",text:"A: Is this your family?\nB: Yes! This is my wife, Carla, and these are our kids.\nA: How old are they?\nB: Lucas is eight and Bia is five.",pt:"A: Esta é sua família?\nB: Sim! Esta é minha esposa, Carla, e estes são nossos filhos.\nA: Quantos anos eles têm?\nB: O Lucas tem oito e a Bia tem cinco.",q:"Quantos anos a Bia tem?",o:["5","8","3","15"],a:0},
+  {t:"read",text:"My brother is married. His wife is a nurse, and they live near my parents.",pt:"Meu irmão é casado. A esposa dele é enfermeira, e eles moram perto dos meus pais.",q:"O que a cunhada faz?",o:["É enfermeira","É professora","É médica","Não trabalha"],a:0},
+  {t:"read",text:"A: Do you have any brothers or sisters?\nB: Yes, I have one sister. She's older than me.",pt:"A: Você tem irmãos ou irmãs?\nB: Sim, tenho uma irmã. Ela é mais velha que eu.",q:"Como é a irmã de B?",o:["Mais velha que B","Mais nova que B","Gêmea de B","B não tem irmã"],a:0},
+  {t:"read",text:"Sunday is family day. We have lunch at my mom's house, and the kids play in the garden.",pt:"Domingo é dia da família. Almoçamos na casa da minha mãe, e as crianças brincam no jardim.",q:"O que acontece no domingo?",o:["Almoço na casa da mãe","Uma viagem","Dia de trabalho","Cinema com as crianças"],a:0},
+  {t:"read",text:"My dad is retired. He spends his time fishing and taking care of the grandkids.",pt:"Meu pai é aposentado. Ele passa o tempo pescando e cuidando dos netos.",q:"O que é verdade sobre o pai?",o:["É aposentado e cuida dos netos","Trabalha o dia todo","Mora em outro país","É pescador profissional"],a:0},
+ ]},
+ write:{chunks:[["This is my wife.","Esta é minha esposa."],["We have two kids.","Temos dois filhos."],["My parents live in...","Meus pais moram em..."],["I'm married.","Sou casado(a)."],["She's older than me.","Ela é mais velha que eu."]],
+  items:[
+  {t:"build",pt:"Esta é minha esposa.",ans:["This","is","my","wife."],x:["are","her"]},
+  {t:"build",pt:"Temos dois filhos.",ans:["We","have","two","kids."],x:["has","childs"]},
+  {t:"build",pt:"Meus pais moram no Rio.",ans:["My","parents","live","in","Rio."],x:["lives","on"]},
+  {t:"type",pt:"Eu sou casado.",acc:["i'm married","i am married"],show:"I'm married."},
+  {t:"build",pt:"Ela é mais velha que eu.",ans:["She's","older","than","me."],x:["old","then"]},
+ ]},
+ listen:{chunks:[["How old are your kids?","Quantos anos têm seus filhos?"],["He's my cousin.","Ele é meu primo."],["They live nearby.","Eles moram perto."],["My mom is a great cook.","Minha mãe cozinha muito bem."],["We get along well.","A gente se dá bem."]],
+  items:[
+  {t:"listen",say:"How old are your kids?",q:"O que você ouviu?",o:["How old are your kids?","How old is your kid?","How are your kids?","Who are your kids?"],a:0},
+  {t:"listen",say:"He's my cousin.",q:"O que a pessoa disse?",o:["Ele é meu primo","Ele é meu sobrinho","Ele é meu cunhado","Ele é meu tio"],a:0,mean:true},
+  {t:"listen",say:"They live nearby.",q:"O que você ouviu?",o:["They live nearby.","They live far away.","They live next door.","They leave nearby."],a:0},
+  {t:"lbuild",say:"My mom is a great cook.",ans:["My","mom","is","a","great","cook."],x:["cooker","good"]},
+  {t:"listen",say:"We get along well.",q:"O que a pessoa quis dizer?",o:["A gente se dá bem","A gente sai junto","A gente mora junto","A gente quase não se fala"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["This is my family.","Esta é minha família."],["I have two kids.","Tenho dois filhos."],["My wife is a teacher.","Minha esposa é professora."],["We get along well.","A gente se dá bem."],["My parents are retired.","Meus pais são aposentados."]],
+  items:[
+  {t:"speak",en:"This is my family.",pt:"Esta é minha família.",pr:"dhis iz mái fémili",tip:"No TH de “this”, encoste a língua nos dentes de cima e solte com voz."},
+  {t:"speak",en:"I have two kids.",pt:"Tenho dois filhos.",pr:"ái rév tú kids"},
+  {t:"speak",en:"My wife is a teacher.",pt:"Minha esposa é professora.",pr:"mái uáif iz a títcher"},
+  {t:"speak",en:"We get along well.",pt:"A gente se dá bem.",pr:"uí guét alóng uél"},
+  {t:"speak",en:"My parents are retired.",pt:"Meus pais são aposentados.",pr:"mái pérents ár ritáierd"},
+ ]},
+}},
+{env:"Shopping",ico:I.shop,sub:"Perguntar preço, tamanho, provar roupa, pagar e trocar produtos.",
+ phases:{
+ read:{chunks:[["How much is it?","Quanto custa?"],["It's on sale.","Está em promoção."],["Can I try it on?","Posso provar?"],["Do you have it in a medium?","Tem no tamanho M?"],["Cash or card?","Dinheiro ou cartão?"]],
+  items:[
+  {t:"read",text:"A: How much is this jacket?\nB: It's forty-five dollars, but it's on sale today.",pt:"A: Quanto custa esta jaqueta?\nB: Custa 45 dólares, mas está em promoção hoje.",q:"O que o vendedor disse?",o:["Custa US$ 45 e está em promoção","Custa US$ 54 sem desconto","Custa US$ 45 e acabou","Custa US$ 15 hoje"],a:0},
+  {t:"read",text:"A: Can I try this on?\nB: Sure, the fitting room is over there.\nA: Do you have it in a medium?\nB: Let me check.",pt:"A: Posso provar isto?\nB: Claro, o provador é ali.\nA: Tem no tamanho M?\nB: Vou verificar.",q:"O que o cliente quer?",o:["Outro tamanho (M)","Outra cor","Um desconto","Devolver a peça"],a:0},
+  {t:"read",text:"Buy one, get one free on all T-shirts this weekend!",pt:"Compre uma, leve outra grátis em todas as camisetas neste fim de semana!",q:"Qual é a promoção?",o:["Leve 2, pague 1 em camisetas","50% em toda a loja","Frete grátis","Camiseta grátis em qualquer compra"],a:0},
+  {t:"read",text:"A: I'd like to return these shoes. They're too small.\nB: Do you have the receipt?",pt:"A: Eu gostaria de devolver estes sapatos. Ficaram pequenos.\nB: Você tem a nota fiscal?",q:"Por que o cliente quer devolver?",o:["Ficaram pequenos","Ficaram grandes","Estão com defeito","A cor está errada"],a:0},
+  {t:"read",text:"A: Cash or card?\nB: Card, please. Can I pay in installments?\nA: Yes, up to three.",pt:"A: Dinheiro ou cartão?\nB: Cartão, por favor. Posso parcelar?\nA: Sim, em até três vezes.",q:"Em quantas vezes pode parcelar?",o:["Até 3 vezes","Até 10 vezes","Não pode parcelar","Até 2 vezes"],a:0},
+ ]},
+ write:{chunks:[["How much is this?","Quanto custa isto?"],["Can I try it on?","Posso provar?"],["Do you have a smaller size?","Tem um tamanho menor?"],["I'll take it.","Vou levar."],["Can I pay by card?","Posso pagar no cartão?"]],
+  items:[
+  {t:"build",pt:"Quanto custa isto?",ans:["How","much","is","this?"],x:["many","are"]},
+  {t:"build",pt:"Posso provar?",ans:["Can","I","try","it","on?"],x:["in","test"]},
+  {t:"build",pt:"Tem um tamanho menor?",ans:["Do","you","have","a","smaller","size?"],x:["small","does"]},
+  {t:"type",pt:"Vou levar.",acc:["i'll take it","i will take it"],show:"I'll take it."},
+  {t:"build",pt:"Posso pagar no cartão?",ans:["Can","I","pay","by","card?"],x:["with","buy"]},
+ ]},
+ listen:{chunks:[["It's fifteen dollars.","Custa quinze dólares."],["Anything else?","Mais alguma coisa?"],["Would you like a bag?","Quer uma sacola?"],["The fitting room is over there.","O provador é ali."],["I'm just looking, thanks.","Só estou olhando, obrigado."]],
+  items:[
+  {t:"listen",say:"It's fifteen dollars.",q:"Quanto custa?",o:["US$ 15","US$ 50","US$ 14","US$ 5"],a:0,mean:true},
+  {t:"listen",say:"Anything else?",q:"O que o atendente perguntou?",o:["Mais alguma coisa?","Algo errado?","Outra pessoa?","Em outro lugar?"],a:0,mean:true},
+  {t:"listen",say:"Would you like a bag?",q:"O que você ouviu?",o:["Would you like a bag?","Would you like it back?","Would you like a bank?","Would you like a cap?"],a:0},
+  {t:"lbuild",say:"The fitting room is over there.",ans:["The","fitting","room","is","over","there."],x:["here","in"]},
+  {t:"listen",say:"I'm just looking, thanks.",q:"O que você ouviu?",o:["I'm just looking, thanks.","I'm just leaving, thanks.","I'm looking for this.","I just looked, thanks."],a:0},
+ ]},
+ speak:{chunks:[["How much is this?","Quanto custa isto?"],["Can I try it on?","Posso provar?"],["Do you have it in black?","Tem em preto?"],["I'll take it.","Vou levar."],["Just looking, thanks.","Só olhando, obrigado."]],
+  items:[
+  {t:"speak",en:"How much is this?",pt:"Quanto custa isto?",pr:"ráu mâtch iz dhis?"},
+  {t:"speak",en:"Can I try it on?",pt:"Posso provar?",pr:"kén ái trái it ón?"},
+  {t:"speak",en:"Do you have it in black?",pt:"Tem em preto?",pr:"du iú rév it in blék?"},
+  {t:"speak",en:"I'll take it.",pt:"Vou levar.",pr:"áil têik it"},
+  {t:"speak",en:"Just looking, thanks.",pt:"Só olhando, obrigado.",pr:"djâst lúkin, thénks",tip:"No TH de “thanks”, ponta da língua entre os dentes, soprando sem voz."},
+ ]},
+}},
+{env:"Restaurante",ico:I.food,sub:"Reservar mesa, pedir do cardápio, falar de alergias e pedir a conta.",
+ phases:{
+ read:{chunks:[["A table for four, please.","Uma mesa para quatro, por favor."],["Do you have a reservation?","Vocês têm reserva?"],["Today's special","Prato do dia"],["How would you like your steak?","Qual o ponto da carne?"],["Is service included?","O serviço está incluído?"]],
+  items:[
+  {t:"read",text:"A: Good evening. Do you have a reservation?\nB: No, we don't. A table for four, please.\nA: Sure, it's a 10-minute wait.",pt:"A: Boa noite. Vocês têm reserva?\nB: Não. Uma mesa para quatro, por favor.\nA: Claro, a espera é de 10 minutos.",q:"Quanto tempo vão esperar?",o:["10 minutos","4 minutos","Não vão esperar","40 minutos"],a:0},
+  {t:"read",text:"A: Hi! What can I get you?\nB: Can I get a large coffee, please?\nA: Sure. For here or to go?\nB: To go, thanks.",pt:"A: Oi! O que vai querer?\nB: Pode me ver um café grande?\nA: Claro. Para tomar aqui ou levar?\nB: Para levar, obrigado.",q:"O que o cliente decidiu?",o:["Levar o café","Tomar o café lá","Trocar por um pequeno","Cancelar o pedido"],a:0},
+  {t:"read",text:"Today's special: grilled salmon with rice and salad. Dessert included.",pt:"Prato do dia: salmão grelhado com arroz e salada. Sobremesa incluída.",q:"O que o prato do dia inclui?",o:["Salmão, arroz, salada e sobremesa","Frango com batata","Só o salmão","Salada, sem sobremesa"],a:0},
+  {t:"read",text:"A: How would you like your steak?\nB: Medium, please. And no onions. I'm allergic.",pt:"A: Qual o ponto da carne?\nB: Ao ponto, por favor. E sem cebola. Sou alérgico.",q:"O que o cliente pediu?",o:["Ao ponto, sem cebola","Bem passada, com cebola","Malpassada, sem sal","Ao ponto, com cebola extra"],a:0},
+  {t:"read",text:"A: Is service included?\nB: No, it isn't. Most people leave a 15 to 20 percent tip.",pt:"A: O serviço está incluído?\nB: Não. A maioria das pessoas deixa de 15 a 20% de gorjeta.",q:"E a gorjeta?",o:["Não está incluída; costuma ser 15 a 20%","Já está incluída","É proibida","É sempre 10%"],a:0},
+ ]},
+ write:{chunks:[["I'd like a table for two.","Eu gostaria de uma mesa para dois."],["Can I see the menu, please?","Posso ver o cardápio?"],["I'll have the chicken.","Vou querer o frango."],["Can I get the check?","Pode trazer a conta?"],["No ice, please.","Sem gelo, por favor."]],
+  items:[
+  {t:"build",pt:"Eu gostaria de uma mesa para dois.",ans:["I'd","like","a","table","for","two."],x:["want","to"]},
+  {t:"build",pt:"Posso ver o cardápio, por favor?",ans:["Can","I","see","the","menu,","please?"],x:["look","a"]},
+  {t:"build",pt:"Vou querer o frango.",ans:["I'll","have","the","chicken."],x:["has","a"]},
+  {t:"type",pt:"A conta, por favor.",acc:["can i get the check please","can i have the check please","the check please","check please","can i get the bill please","can i have the bill please","the bill please"],show:"Can I get the check, please?"},
+  {t:"build",pt:"Sem gelo, por favor.",ans:["No","ice,","please."],x:["not","with"]},
+ ]},
+ listen:{chunks:[["Are you ready to order?","Já podem fazer o pedido?"],["Still or sparkling?","Sem gás ou com gás?"],["Enjoy your meal!","Bom apetite!"],["How would you like it?","Como você prefere?"],["For here or to go?","Para comer aqui ou levar?"]],
+  items:[
+  {t:"listen",say:"Are you ready to order?",q:"O que você ouviu?",o:["Are you ready to order?","Are you ready to go?","Are you ready to pay?","Are you already in order?"],a:0},
+  {t:"listen",say:"Still or sparkling?",q:"O garçom perguntou sobre a água:",o:["Sem gás ou com gás?","Gelada ou natural?","Pequena ou grande?","Com limão ou sem?"],a:0,mean:true},
+  {t:"listen",say:"Enjoy your meal!",q:"O que o garçom disse?",o:["Bom apetite!","Aproveite a promoção!","Pague a refeição!","Escolha o prato!"],a:0,mean:true},
+  {t:"lbuild",say:"How would you like it?",ans:["How","would","you","like","it?"],x:["what","do"]},
+  {t:"listen",say:"For here or to go?",q:"O atendente perguntou:",o:["Para comer aqui ou levar?","Mesa para quantos?","Quer pagar agora?","Mais alguma coisa?"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["A table for two, please.","Uma mesa para dois, por favor."],["I'd like the salmon.","Eu queria o salmão."],["Can I get the check, please?","Pode trazer a conta?"],["No onions, please.","Sem cebola, por favor."],["Everything was delicious.","Estava tudo delicioso."]],
+  items:[
+  {t:"speak",en:"A table for two, please.",pt:"Uma mesa para dois, por favor.",pr:"a têibol fór tú, plíz"},
+  {t:"speak",en:"I'd like the salmon.",pt:"Eu queria o salmão.",pr:"áid láik dâ sémon",tip:"O L de “salmon” não é pronunciado."},
+  {t:"speak",en:"Can I get the check, please?",pt:"Pode trazer a conta, por favor?",pr:"kén ái guét dâ tchék, plíz?"},
+  {t:"speak",en:"No onions, please.",pt:"Sem cebola, por favor.",pr:"nôu ânions, plíz"},
+  {t:"speak",en:"Everything was delicious.",pt:"Estava tudo delicioso.",pr:"évrithing uóz dilíxas"},
+ ]},
+}},
+{env:"Lazer",ico:I.fun,sub:"Falar do que você gosta, combinar programas e contar planos para o fim de semana.",
+ phases:{
+ read:{chunks:[["What do you do for fun?","O que você faz para se divertir?"],["I'm into soccer.","Eu curto futebol."],["Are you up for a movie?","Topa um filme?"],["Sounds good!","Boa! / Fechado!"],["I'm going to...","Eu vou... (plano)"]],
+  items:[
+  {t:"read",text:"A: What do you do for fun?\nB: I'm into soccer. I play every Saturday with some friends.",pt:"A: O que você faz para se divertir?\nB: Curto futebol. Jogo todo sábado com uns amigos.",q:"Quando B joga futebol?",o:["Todo sábado","Todo domingo","Uma vez por mês","B não joga"],a:0},
+  {t:"read",text:"A: Are you up for a movie tonight?\nB: Sounds good! What time?\nA: The 8 p.m. show.",pt:"A: Topa um filme hoje à noite?\nB: Boa! Que horas?\nA: A sessão das 20h.",q:"A que horas é o filme?",o:["20h","18h","8h da manhã","22h"],a:0},
+  {t:"read",text:"This weekend I'm going to visit the beach with my family. We're going to leave early on Saturday.",pt:"Neste fim de semana vou à praia com minha família. Vamos sair cedo no sábado.",q:"Quando eles vão sair?",o:["Cedo no sábado","Domingo à noite","Sexta à tarde","Não vão sair"],a:0},
+  {t:"read",text:"I used to go to the gym, but now I prefer walking in the park. It's free and relaxing.",pt:"Eu ia à academia, mas agora prefiro caminhar no parque. É grátis e relaxante.",q:"O que ela prefere hoje?",o:["Caminhar no parque","Ir à academia","Correr na praia","Ficar em casa"],a:0},
+  {t:"read",text:"A: Did you watch the game last night?\nB: Yes! It was amazing. We won three to one.",pt:"A: Você viu o jogo ontem à noite?\nB: Vi! Foi incrível. Ganhamos de três a um.",q:"Qual foi o resultado?",o:["O time dele ganhou de 3 a 1","Perderam de 3 a 1","Empatou em 3 a 3","O jogo foi adiado"],a:0},
+ ]},
+ write:{chunks:[["I'm into music.","Eu curto música."],["Let's go to the beach.","Vamos à praia."],["I'm going to travel.","Vou viajar."],["What are you doing this weekend?","O que você vai fazer no fim de semana?"],["I love watching movies.","Adoro ver filmes."]],
+  items:[
+  {t:"build",pt:"Eu curto música.",ans:["I'm","into","music."],x:["in","musics"]},
+  {t:"build",pt:"Vamos à praia.",ans:["Let's","go","to","the","beach."],x:["going","at"]},
+  {t:"build",pt:"Vou viajar no mês que vem.",ans:["I'm","going","to","travel","next","month."],x:["will","in"]},
+  {t:"type",pt:"O que você vai fazer neste fim de semana?",acc:["what are you doing this weekend","what are you going to do this weekend","what are you up to this weekend","what will you do this weekend","what are you doing on the weekend","what are you going to do on the weekend"],show:"What are you doing this weekend?"},
+  {t:"build",pt:"Adoro ver filmes.",ans:["I","love","watching","movies."],x:["watch","see"]},
+ ]},
+ listen:{chunks:[["Are you free this weekend?","Você está livre no fim de semana?"],["Let's grab a beer.","Vamos tomar uma cerveja."],["I'm not into horror movies.","Não curto filme de terror."],["Maybe next time.","Quem sabe da próxima."],["That sounds like fun!","Parece divertido!"]],
+  items:[
+  {t:"listen",say:"Are you free this weekend?",q:"O que você ouviu?",o:["Are you free this weekend?","Are you free this week?","Are you three this weekend?","Are you free next weekend?"],a:0},
+  {t:"listen",say:"Let's grab a beer.",q:"O que a pessoa sugeriu?",o:["Tomar uma cerveja","Pegar um ônibus","Comprar uma cerveja para casa","Pegar um urso de pelúcia"],a:0,mean:true},
+  {t:"listen",say:"I'm not into horror movies.",q:"O que você ouviu?",o:["I'm not into horror movies.","I'm really into horror movies.","I'm not in the horror movie.","I'm not into romantic movies."],a:0},
+  {t:"lbuild",say:"Maybe next time.",ans:["Maybe","next","time."],x:["night","may"]},
+  {t:"listen",say:"That sounds like fun!",q:"O que a pessoa disse?",o:["Parece divertido!","Isso é barulhento!","Que som bom!","Isso é engraçado de ouvir!"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["What do you do for fun?","O que você faz para se divertir?"],["I'm into soccer.","Eu curto futebol."],["Sounds good!","Fechado!"],["Maybe next time.","Quem sabe da próxima."],["I'm going to the beach.","Vou à praia."]],
+  items:[
+  {t:"speak",en:"What do you do for fun?",pt:"O que você faz para se divertir?",pr:"uót du iú du fór fân?"},
+  {t:"speak",en:"I'm into soccer.",pt:"Eu curto futebol.",pr:"áim íntu sóker"},
+  {t:"speak",en:"Sounds good!",pt:"Fechado! / Boa!",pr:"sáunds gúd"},
+  {t:"speak",en:"Maybe next time.",pt:"Quem sabe da próxima.",pr:"mêibi nékst táim"},
+  {t:"speak",en:"I'm going to the beach.",pt:"Vou à praia.",pr:"áim gôuin tu dâ bítch",tip:"Alongue o I de “beach”: bííítch. Curto vira outra palavra."},
+ ]},
+}},
+{env:"Trabalho",ico:I.work,sub:"Reuniões, e-mails, prazos e conversas profissionais no escritório.",
+ phases:{
+ read:{chunks:[["has been moved to...","foi remarcado para..."],["I'm in charge of...","Sou responsável por..."],["Can we push the call to...?","Podemos adiar a call para...?"],["That works for me.","Por mim, tudo bem."],["Please find attached...","Segue em anexo..."]],
+  items:[
+  {t:"read",text:"Hi team,\nThe meeting has been moved to Thursday at 3 p.m. Please bring your reports.\nThanks, Mark",pt:"Oi, pessoal,\nA reunião foi remarcada para quinta às 15h. Por favor, tragam seus relatórios.\nObrigado, Mark",q:"Para quando a reunião foi remarcada?",o:["Quinta às 15h","Terça às 15h","Quinta às 13h","Sexta às 15h"],a:0},
+  {t:"read",text:"I've been working at this company for two years, and now I'm in charge of the sales team.",pt:"Trabalho nesta empresa há dois anos, e agora sou responsável pela equipe de vendas.",q:"O que é verdade?",o:["Trabalha lá há 2 anos e lidera vendas","Começou ontem na empresa","Saiu da equipe de vendas","Vai trocar de empresa em 2 anos"],a:0},
+  {t:"read",text:"A: Can we push the call to 4 p.m.?\nB: Sure, that works for me.",pt:"A: Podemos adiar a call para as 16h?\nB: Claro, por mim tudo bem.",q:"O que combinaram?",o:["Adiar a call para as 16h","Cancelar a call","Antecipar a call","Fazer a call às 14h"],a:0},
+  {t:"read",text:"Unfortunately, we're out of stock. We'll let you know as soon as it arrives.",pt:"Infelizmente estamos sem estoque. Avisaremos assim que chegar.",q:"O que a empresa disse?",o:["Está sem estoque e vai avisar","O produto já chegou","O pedido foi cancelado","A empresa fechou"],a:0},
+  {t:"read",text:"Hi Ana,\nPlease find attached the proposal. Let me know if you have any questions.\nBest, Paulo",pt:"Oi, Ana,\nSegue em anexo a proposta. Me avise se tiver alguma dúvida.\nAbraço, Paulo",q:"O que o e-mail diz?",o:["Proposta em anexo; avise se tiver dúvidas","Pede para Ana enviar a proposta","Cancela a proposta","Marca uma reunião"],a:0},
+ ]},
+ write:{chunks:[["I've worked here for...","Trabalho aqui há..."],["I'll call you tomorrow.","Te ligo amanhã."],["I sent the report yesterday.","Enviei o relatório ontem."],["I agree with you.","Concordo com você."],["Could you send me...?","Poderia me enviar...?"]],
+  items:[
+  {t:"build",pt:"Trabalho aqui há três anos.",ans:["I've","worked","here","for","three","years."],x:["since","am"]},
+  {t:"build",pt:"Eu te ligo amanhã.",ans:["I'll","call","you","tomorrow."],x:["yesterday","to"]},
+  {t:"build",pt:"Enviei o relatório ontem.",ans:["I","sent","the","report","yesterday."],x:["send","sended"]},
+  {t:"type",pt:"Concordo com você.",acc:["i agree with you","i agree"],show:"I agree with you."},
+  {t:"build",pt:"Você poderia me enviar o relatório?",ans:["Could","you","send","me","the","report?"],x:["to","sent"]},
+ ]},
+ listen:{chunks:[["I'll get back to you.","Eu te dou um retorno."],["Let's call it a day.","Vamos encerrar por hoje."],["The deadline is...","O prazo é..."],["Sorry for the delay.","Desculpe a demora."],["Would you mind...?","Você se importaria de...?"]],
+  items:[
+  {t:"listen",say:"I'll get back to you by Friday.",q:"O que você ouviu?",o:["I'll get back to you by Friday.","I'll get back to you by Monday.","I got back to you on Friday.","I'll call you back on Friday."],a:0},
+  {t:"listen",say:"Let's call it a day.",q:"O que a pessoa quis dizer?",o:["Vamos encerrar por hoje","Vamos ligar durante o dia","Que dia é hoje?","Vamos marcar um dia"],a:0,mean:true},
+  {t:"listen",say:"The deadline is next Tuesday.",q:"O que você ouviu?",o:["The deadline is next Tuesday.","The deadline is next Thursday.","The deadline is today.","The headline is next Tuesday."],a:0},
+  {t:"lbuild",say:"Sorry for the delay.",ans:["Sorry","for","the","delay."],x:["late","to"]},
+  {t:"listen",say:"Would you mind closing the window?",q:"O que a pessoa pediu?",o:["Que você feche a janela","Que você abra a janela","Se você viu a janela","Se a janela está fechada"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["Nice to meet you. I work in sales.","Prazer. Trabalho com vendas."],["I've been here for two years.","Estou aqui há dois anos."],["Let me think about it.","Deixa eu pensar."],["That makes sense.","Faz sentido."],["I'm looking forward to it.","Estou ansioso por isso (no bom sentido)."]],
+  items:[
+  {t:"speak",en:"Nice to meet you. I work in sales.",pt:"Prazer. Trabalho com vendas.",pr:"náis tu mít iú. ái uârk in sêiolz"},
+  {t:"speak",en:"I've been here for two years.",pt:"Estou aqui há dois anos.",pr:"áiv bín ríer fór tú íers"},
+  {t:"speak",en:"Let me think about it.",pt:"Deixa eu pensar sobre isso.",pr:"lét mí thínk abáut it",tip:"No TH de “think”, ponta da língua entre os dentes, soprando sem voz."},
+  {t:"speak",en:"That makes sense.",pt:"Faz sentido.",pr:"dhét mêiks séns",tip:"O TH de “that” vibra: língua entre os dentes, com voz."},
+  {t:"speak",en:"I'm looking forward to it.",pt:"Estou ansioso por isso.",pr:"áim lúkin fóruârd tu it"},
+ ]},
+}},
+];
+/* shuffle answer options once per load, keeping the right one */
+LEVELS.forEach(L=>SKILLS.forEach(s=>L.phases[s.key].items.forEach(it=>{if(it.o){const right=it.o[it.a];it.o=shuffle(it.o.slice());it.a=it.o.indexOf(right);}})));
+
+const RANKS=[[0,"Iniciante"],[200,"Em evolução"],[500,"Conversador"],[900,"Confiante"],[1400,"Fluente"]];
+const DAILY_GOAL=60;
+
+/* ---------- state (saved in this browser) ---------- */
+const KEY="ingles-acelerado-v1";
+let S={xp:0,stars:{},streak:0,last:"",today:{d:"",xp:0}};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const dayStr=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
+const today=()=>dayStr(new Date());
+function touchDay(){const t=today();if(S.today.d!==t)S.today={d:t,xp:0};}
+touchDay();
+function addXP(n){touchDay();S.xp+=n;S.today.xp+=n;const t=today();
+  if(S.last!==t){const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===dayStr(y))?S.streak+1:1;S.last=t;}save();}
+const sk=(l,s)=>l+"-"+s;
+const starsOf=(l,s)=>S.stars[sk(l,s)]||0;
+const levelDone=l=>SKILLS.every((s,i)=>starsOf(l,i)>0);
+const levelOpen=l=>l===0||levelDone(l-1);
+const phaseOpen=(l,s)=>levelOpen(l)&&(s===0||starsOf(l,s-1)>0);
+const levelStars=l=>SKILLS.reduce((a,s,i)=>a+starsOf(l,i),0);
+const rank=xp=>{let r=RANKS[0];RANKS.forEach(x=>{if(xp>=x[0])r=x;});return r;};
+const nextRank=xp=>RANKS.find(x=>x[0]>xp);
+function current(){for(let l=0;l<LEVELS.length;l++){if(!levelOpen(l))break;for(let s=0;s<4;s++){if(starsOf(l,s)===0)return [l,s];}}return null;}
+
+/* ---------- audio ---------- */
+const synth=window.speechSynthesis;let voice=null;
+function pickVoice(){if(!synth)return;const vs=synth.getVoices();
+  voice=vs.find(v=>/en-US/i.test(v.lang)&&/Samantha|Google US|Aria|Jenny|Natural/i.test(v.name))||vs.find(v=>/en-US/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null;}
+if(synth){pickVoice();try{synth.addEventListener("voiceschanged",pickVoice);}catch(e){synth.onvoiceschanged=pickVoice;}}
+function say(text,slow){if(!synth){noAudio();return;}try{synth.cancel();const u=new SpeechSynthesisUtterance(text.replace(/^[AB]: /gm,""));
+  u.lang="en-US";if(voice)u.voice=voice;u.rate=slow?0.62:0.92;synth.speak(u);}catch(e){noAudio();}}
+function noAudio(){const n=document.querySelector("#lesson .note.audio");if(n)n.hidden=false;}
+
+/* ---------- utils ---------- */
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+const norm=s=>s.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9'ãáâéêíóôõúç ]/g," ").replace(/\s+/g," ").trim();
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const fmtDialog=t=>esc(t).replace(/^([AB]):/gm,'<span class="who">$1</span>');
+const ring=(pct,col)=>{const r=26,c=2*Math.PI*r;return `<svg class="ring" viewBox="0 0 64 64"><circle cx="32" cy="32" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="8"/><circle cx="32" cy="32" r="${r}" fill="none" stroke="${col}" stroke-width="8" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c*(1-pct)}" transform="rotate(-90 32 32)"/></svg>`;};
+
+/* ---------- home ---------- */
+const home=document.getElementById("home");
+function renderHome(){
+  touchDay();
+  const cur=current(),li=cur?cur[0]:LEVELS.length-1,L=LEVELS[li];
+  const totalStars=Object.values(S.stars).reduce((a,b)=>a+b,0),maxStars=LEVELS.length*12;
+  const ls=levelStars(li),r=rank(S.xp),nr=nextRank(S.xp);
+  const goal=Math.min(1,S.today.xp/DAILY_GOAL);
+  const rankPct=nr?(S.xp-r[0])/(nr[0]-r[0]):1;
+  home.innerHTML=`
+  <header class="top">
+    <div class="brand"><span class="logo">EN</span>Inglês Acelerado</div>
+    <div class="stats">
+      <span class="stat s-pts" title="Seus pontos">${I.bolt}<b>${S.xp}</b> pontos</span>
+      <span class="stat s-fire" title="Dias seguidos estudando">${I.fire}<b>${S.streak}</b> ${S.streak===1?"dia":"dias"}</span>
+      <span class="stat s-rank" title="Seu título">${I.badge}${r[1]}</span>
+    </div>
+  </header>
+  <section class="hero env-${li}">
+    <div class="hero-main">
+      <div class="big-ico" aria-hidden="true">${L.ico}</div>
+      <span class="pill">Nível ${li+1} de ${LEVELS.length} · inglês para adultos</span>
+      <div><h1 class="hero-title">${cur?L.env:"Curso concluído"}</h1>
+        <p class="hero-sub">${cur?L.sub:"Você passou por todos os ambientes. Refaça as fases para ganhar 3 estrelas em todas."}</p></div>
+      <div><div class="hero-meta"><span>${cur?"Próxima fase: "+SKILLS[cur[1]].name:"Tudo liberado"}</span><span class="mono">${ls}/12 estrelas</span></div>
+        <div class="hbar" role="progressbar" aria-valuenow="${ls}" aria-valuemax="12"><i style="width:${ls/12*100}%"></i></div></div>
+      <div class="hero-actions"><button class="btn white" id="go" ${cur?"":"disabled"}>${cur&&totalStars?"Continuar estudando":"Começar agora"}</button></div>
+    </div>
+    <div class="side">
+      <div class="tile-stat"><div class="ring-row">${ring(goal,"var(--gold)")}<div><div class="eyebrow">Meta de hoje</div><strong>${S.today.xp}/${DAILY_GOAL}</strong><div style="font-size:13px;color:var(--muted)">${goal>=1?"Meta batida!":"pontos"}</div></div></div></div>
+      <div class="tile-stat"><div class="ring-row">${ring(rankPct,"var(--c-speak)")}<div><div class="eyebrow">${nr?"Próximo título":"Título máximo"}</div><strong>${nr?nr[1]:r[1]}</strong><div style="font-size:13px;color:var(--muted)">${nr?"faltam "+(nr[0]-S.xp)+" pontos":"Parabéns!"}</div></div></div></div>
+      <div class="tile-stat"><div class="ring-row">${ring(totalStars/maxStars,"var(--c-write)")}<div><div class="eyebrow">Curso todo</div><strong>${totalStars}/${maxStars}</strong><div style="font-size:13px;color:var(--muted)">estrelas</div></div></div></div>
+    </div>
+  </section>
+  <section class="method" aria-label="Como o curso funciona">
+    <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--c-write)"></span>Método 1</div><h3>Blocos prontos (chunks)</h3><p>Cada fase começa com expressões inteiras, como "Can I try it on?". Você guarda o bloco e para de traduzir palavra por palavra.</p></div>
+    <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--c-listen)"></span>Método 2</div><h3>Entender 70% a 80%</h3><p>Diálogos com áudio de situações reais. Tradução e legenda ficam escondidas: use só quando travar.</p></div>
+    <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--gold)"></span>Pontuação</div><h3>10 pontos por acerto</h3><p>Sem ajuda vale mais, 3 acertos seguidos dão bônus. Acerte 3 de 5 para passar de fase.</p></div>
+  </section>
+  ${LEVELS.map((Lv,l)=>{const open=levelOpen(l);return `
+  <section class="level env-${l} ${open?"":"locked"}">
+    <div class="level-band"><span class="l-ico">${Lv.ico}</span>
+      <div class="l-txt"><div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.9">Nível ${l+1}${open?"":" · bloqueado"}</div><h2>Ambiente ${Lv.env}</h2><div class="l-sub">${Lv.sub}</div></div>
+      <span class="l-score">${levelStars(l)}/12 ★</span></div>
+    <div class="gates">${SKILLS.map((s,si)=>{const po=phaseOpen(l,si),st=starsOf(l,si),isNext=cur&&cur[0]===l&&cur[1]===si;
+      return `<button class="gate ${isNext?"next":""}" style="--gc:${s.c};--gs:${s.soft}" data-l="${l}" data-s="${si}" ${po?"":"disabled"} aria-label="${s.name}, nível ${l+1}${po?"":", bloqueada"}">
+        <div class="g-top"><span class="g-ico">${s.ico}</span>${isNext?'<span class="tag">Próxima</span>':po?"":`<span class="lock">${I.lock}</span>`}</div>
+        <div><h3>${s.name}</h3><p>${s.desc}</p></div>
+        <div class="stars">${star(st>0)}${star(st>1)}${star(st>2)}</div></button>`;}).join("")}</div>
+  </section>`;}).join("")}
+  <div class="foot-note"><span>Seu progresso fica salvo neste aparelho.</span><button class="linkish" id="reset">Recomeçar do zero</button></div>`;
+  const go=document.getElementById("go");if(go&&cur)go.onclick=()=>startPhase(cur[0],cur[1]);
+  home.querySelectorAll(".gate").forEach(g=>g.onclick=()=>startPhase(+g.dataset.l,+g.dataset.s));
+  const rs=document.getElementById("reset");let armed=false;
+  rs.onclick=()=>{if(!armed){armed=true;rs.textContent="Toque de novo para apagar todo o progresso";setTimeout(()=>{armed=false;rs.textContent="Recomeçar do zero";},4000);return;}
+    S={xp:0,stars:{},streak:0,last:"",today:{d:today(),xp:0}};save();renderHome();};
+}
+
+/* ---------- lesson ---------- */
+const box=document.getElementById("lesson");
+let R=null;
+function startPhase(l,s){
+  R={l,s,P:LEVELS[l].phases[SKILLS[s].key],i:0,correct:0,combo:0,best:0,earned:0,help:false,picked:null,built:[],done:false,wasLevelDone:levelDone(l)};
+  box.className="lesson env-"+l;box.style.setProperty("--sk",SKILLS[s].c);box.style.setProperty("--sk-soft",SKILLS[s].soft);
+  box.hidden=false;document.body.style.overflow="hidden";renderIntro();
+}
+function closeLesson(){if(synth)try{synth.cancel();}catch(e){}stopMic();box.hidden=true;document.body.style.overflow="";R=null;renderHome();window.scrollTo(0,0);}
+function frame(body,foot,progress){
+  box.innerHTML=`<div class="l-top"><button class="x" id="x" aria-label="Sair da fase">${I.close}</button>
+    <div class="bar" aria-label="Progresso"><i style="width:${progress}%"></i></div><span class="combo" id="combo">${R&&R.combo>=2?"🔥 ×"+R.combo:""}</span></div>
+    <div class="l-body">${body}</div>
+    <div class="l-foot" id="lf"><div class="l-foot-in" id="lfi">${foot}</div></div>`;
+  document.getElementById("x").onclick=closeLesson;box.scrollTop=0;
+}
+const badges=()=>`<span class="skill-badge"><i>${SKILLS[R.s].ico}</i>${SKILLS[R.s].name}</span><span class="env-badge">Nível ${R.l+1} · ${LEVELS[R.l].env}</span>`;
+function renderIntro(){
+  frame(`<div class="q-kind">${badges()}</div>
+  <h2 class="q-title">Blocos prontos desta fase</h2>
+  <p style="margin:0;color:var(--muted)">Ouça cada bloco e repita em voz alta duas vezes. Guarde a frase inteira e a situação em que ela é usada.</p>
+  <div class="chunks">${R.P.chunks.map((c,i)=>`<div class="chunk"><button class="sp" data-i="${i}" aria-label="Ouvir ${esc(c[0])}">${I.sound}</button><div><div class="en">${esc(c[0])}</div><div class="pt">${esc(c[1])}</div></div></div>`).join("")}</div>
+  <p class="note audio" hidden>O áudio não está disponível neste navegador. Leia os blocos em voz alta.</p>`,
+  `<div class="fb"><p style="color:var(--muted)">5 exercícios · acerte 3 para passar</p></div><button class="btn" id="startq">Começar fase</button>`,0);
+  box.querySelectorAll(".chunk .sp").forEach(b=>b.onclick=()=>say(R.P.chunks[+b.dataset.i][0]));
+  document.getElementById("startq").onclick=renderItem;
+}
+function renderItem(){
+  const it=R.P.items[R.i];Object.assign(R,{help:false,picked:null,built:[],done:false});
+  let body=`<div class="q-kind">${badges()}<span class="eyebrow">${R.i+1} de ${R.P.items.length}</span></div>`;
+  if(it.t==="read"){
+    body+=`<h2 class="q-title">Leia e responda</h2>
+    <div class="card"><div class="dialog">${fmtDialog(it.text)}</div></div>
+    <div class="tools"><button class="chip" id="hear">${I.sound} Ouvir texto</button><button class="chip" id="tr">${I.eye} Ver tradução <span class="cost">−4</span></button></div>
+    <div class="translation" id="trt" hidden>${esc(it.pt)}</div>
+    <div class="prompt">${esc(it.q)}</div>${optsHTML(it)}`;
+  }else if(it.t==="build"||it.t==="type"){
+    body+=`<h2 class="q-title">${it.t==="build"?"Monte a frase em inglês":"Escreva em inglês"}</h2><div class="prompt">“${esc(it.pt)}”</div>`;
+    body+=it.t==="build"?buildHTML(it):`<textarea id="ta" placeholder="Digite aqui em inglês..." autocomplete="off" autocapitalize="sentences" spellcheck="false"></textarea>
+      <div class="tools"><button class="chip" id="hint">${I.eye} Ver início <span class="cost">−4</span></button></div><div class="translation" id="hintt" hidden></div>`;
+  }else if(it.t==="listen"||it.t==="lbuild"){
+    body+=`<h2 class="q-title">${it.t==="lbuild"?"Ouça e monte o que foi dito":esc(it.q)}</h2>
+    <div class="play-row"><button class="play" id="pl" aria-label="Ouvir">${I.sound}</button><button class="play slow" id="ps" aria-label="Ouvir devagar">${I.turtle}</button></div>
+    <div class="tools" style="justify-content:center"><button class="chip" id="sub">${I.eye} Legenda em inglês <span class="cost">−4</span></button></div>
+    <div class="subtitle" id="subt" hidden>${esc(it.say)}</div>
+    <p class="note audio" hidden>O áudio não está disponível neste navegador. Use a legenda.</p>`;
+    body+=it.t==="lbuild"?buildHTML(it):optsHTML(it);
+  }else{
+    body+=`<h2 class="q-title">Ouça e fale em voz alta</h2>
+    <div class="card" style="display:grid;gap:10px"><div class="speak-phrase">${esc(it.en)}</div><div style="color:var(--muted)">${esc(it.pt)}</div>
+      <div><span class="pron" title="Pronúncia aproximada">${esc(it.pr)}</span></div>${it.tip?`<div style="font-size:14px;color:var(--muted)">${esc(it.tip)}</div>`:""}</div>
+    <div class="play-row"><button class="play slow" id="pl" aria-label="Ouvir">${I.sound}</button><button class="play slow" id="ps" aria-label="Ouvir devagar">${I.turtle}</button></div>
+    <button class="mic" id="mic" aria-label="Falar">${I.mic}</button>
+    <div class="heard" id="heard">Ouça, toque no microfone e repita a frase inteira.</div>
+    <p class="note audio" hidden>O áudio não está disponível neste navegador. Leia a pronúncia aproximada.</p>`;
+  }
+  const foot=it.t==="speak"?`<div class="fb"><p style="color:var(--muted)">Sem microfone? Fale em voz alta e avalie você mesmo.</p></div><div class="self"><button class="btn ghost" id="selfno">Preciso treinar</button><button class="btn good" id="selfok">Falei bem</button></div>`
+    :`<button class="btn ghost" id="skip">Pular</button><button class="btn" id="check" disabled>Verificar</button>`;
+  frame(body,foot,R.i/R.P.items.length*100);wire(it);
+  if(it.t!=="read"&&it.t!=="build"&&it.t!=="type")setTimeout(()=>say(it.say||it.en),350);
+}
+function optsHTML(it){return `<div class="opts" role="radiogroup">${it.o.map((o,i)=>`<button class="opt" role="radio" aria-checked="false" data-i="${i}"><span class="k">${i+1}</span>${esc(o)}</button>`).join("")}</div>`;}
+function buildHTML(it){const tiles=shuffle(it.ans.concat(it.x).map((w,i)=>({w,i})));
+  return `<div class="answer-zone" id="az" aria-label="Sua frase"></div><div class="bank" id="bank">${tiles.map(t=>`<button class="tile" data-i="${t.i}">${esc(t.w)}</button>`).join("")}</div>`;}
+function wire(it){
+  const $=id=>document.getElementById(id);const check=$("check"),skip=$("skip");
+  const useHelp=(btn,el)=>{if(!btn)return;btn.onclick=()=>{el.hidden=!el.hidden;R.help=true;const c=btn.querySelector(".cost");if(c)c.textContent="usada";};};
+  if($("hear"))$("hear").onclick=()=>say(it.text);
+  useHelp($("tr"),$("trt"));useHelp($("sub"),$("subt"));
+  if($("hint")){$("hintt").textContent=it.show.split(" ").slice(0,2).join(" ")+" ...";useHelp($("hint"),$("hintt"));}
+  if($("pl"))$("pl").onclick=()=>say(it.say||it.en);
+  if($("ps"))$("ps").onclick=()=>say(it.say||it.en,true);
+  box.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{if(R.done)return;box.querySelectorAll(".opt").forEach(x=>{x.classList.remove("sel");x.setAttribute("aria-checked","false");});
+    b.classList.add("sel");b.setAttribute("aria-checked","true");R.picked=+b.dataset.i;check.disabled=false;});
+  const bank=$("bank"),az=$("az");
+  if(bank){const all=it.ans.concat(it.x);
+    const redraw=()=>{az.innerHTML=R.built.map((ti,k)=>`<button class="tile" data-k="${k}">${esc(all[ti])}</button>`).join("");
+      bank.querySelectorAll(".tile").forEach(t=>t.classList.toggle("used",R.built.includes(+t.dataset.i)));
+      az.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{if(R.done)return;R.built.splice(+t.dataset.k,1);redraw();});
+      check.disabled=R.built.length===0;};
+    bank.querySelectorAll(".tile").forEach(t=>t.onclick=()=>{if(R.done||t.classList.contains("used"))return;R.built.push(+t.dataset.i);if(it.t!=="lbuild")say(all[+t.dataset.i]);redraw();});
+  }
+  const ta=$("ta");if(ta){ta.oninput=()=>{check.disabled=ta.value.trim().length===0;};setTimeout(()=>ta.focus(),50);
+    ta.onkeydown=e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();if(!check.disabled)check.click();}};}
+  if(check)check.onclick=()=>{let ok=false,answer="";
+    if(it.o){ok=R.picked===it.a;answer=it.o[it.a];
+      box.querySelectorAll(".opt").forEach((x,i)=>{x.disabled=true;if(i===it.a)x.classList.add("right");else if(i===R.picked)x.classList.add("wrong");});}
+    else if(it.ans){const all=it.ans.concat(it.x);ok=norm(R.built.map(i=>all[i]).join(" "))===norm(it.ans.join(" "));answer=it.ans.join(" ");}
+    else{ok=it.acc.map(norm).includes(norm(ta.value));answer=it.show;ta.disabled=true;}
+    finish(ok,answer,it);};
+  if(skip)skip.onclick=()=>finish(false,it.o?it.o[it.a]:(it.ans?it.ans.join(" "):it.show),it,true);
+  if($("selfok"))$("selfok").onclick=()=>finish(true,"",it);
+  if($("selfno"))$("selfno").onclick=()=>finish(false,"",it,false,true);
+  if($("mic"))$("mic").onclick=()=>listenMic(it);
+}
+let rec=null;
+function stopMic(){if(rec){try{rec.abort();}catch(e){}rec=null;}}
+function listenMic(it){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;const heard=document.getElementById("heard"),mic=document.getElementById("mic");
+  if(!SR){heard.textContent="Este navegador não reconhece fala. Use o Google Chrome, ou fale em voz alta e avalie abaixo.";return;}
+  if(rec){stopMic();mic.classList.remove("on");return;}
+  try{if(synth)synth.cancel();rec=new SR();rec.lang="en-US";rec.interimResults=false;rec.maxAlternatives=3;
+    mic.classList.add("on");heard.textContent="Ouvindo... fale agora.";
+    rec.onresult=e=>{const alts=[...e.results[0]].map(a=>a.transcript);const target=norm(it.en).split(" ");
+      let best=0,bestT=alts[0]||"";alts.forEach(t=>{const w=norm(t).split(" ");const hit=target.filter(x=>w.includes(x)).length/target.length;if(hit>best){best=hit;bestT=t;}});
+      heard.textContent=`Entendi: “${bestT}” · ${Math.round(best*100)}% da frase${best>=0.7?"":" · tente de novo"}`;mic.classList.remove("on");rec=null;
+      if(best>=0.7)setTimeout(()=>finish(true,"",it),700);};
+    rec.onerror=ev=>{mic.classList.remove("on");rec=null;heard.textContent=(ev.error==="not-allowed"||ev.error==="service-not-allowed")?"O microfone foi bloqueado. Libere no cadeado da barra de endereço, ou fale em voz alta e avalie abaixo.":"Não consegui ouvir. Tente de novo ou avalie você mesmo abaixo.";};
+    rec.onend=()=>{mic.classList.remove("on");rec=null;};
+    rec.start();
+  }catch(e){mic.classList.remove("on");rec=null;heard.textContent="O microfone não está disponível aqui. Fale em voz alta e avalie você mesmo abaixo.";}
+}
+function finish(ok,answer,it,skipped,practice){
+  if(R.done)return;R.done=true;stopMic();
+  let pts=0;
+  if(ok){R.correct++;R.combo++;R.best=Math.max(R.best,R.combo);pts=R.help?6:10;if(R.combo>=3)pts+=5;R.earned+=pts;}else R.combo=0;
+  const lf=document.getElementById("lf"),lfi=document.getElementById("lfi");lf.className="l-foot "+(ok?"ok":"no");
+  const heading=ok?(R.combo>=3?"Excelente! "+R.combo+" seguidas":R.help?"Correto, com ajuda":"Correto!"):practice?"Continue treinando":skipped?"Pulada":"Quase lá";
+  const msg=ok?`+${pts} pontos${R.combo>=3?" (bônus de sequência)":""}`:answer?`Resposta: <strong>${esc(answer)}</strong>`:"Ouça mais uma vez e repita devagar, depois no ritmo normal.";
+  lfi.innerHTML=`<div class="fb"><h3>${heading}</h3><p>${msg}</p></div><button class="btn ${ok?"good":"bad"}" id="next">Continuar</button>`;
+  if(!ok&&it.t!=="read")say(it.say||it.en||it.show||it.ans.join(" "));
+  document.getElementById("combo").textContent=R.combo>=2?"🔥 ×"+R.combo:"";
+  const n=document.getElementById("next");n.focus();n.onclick=()=>{R.i++;if(R.i<R.P.items.length)renderItem();else renderResult();};
+}
+function renderResult(){
+  const c=R.correct,stars=c>=5?3:c>=4?2:c>=3?1:0,prev=starsOf(R.l,R.s);
+  const bonus=Math.max(0,stars-prev)*15,total=R.earned+bonus;
+  if(total>0)addXP(total);
+  if(stars>prev){S.stars[sk(R.l,R.s)]=stars;save();}
+  const newLevel=levelDone(R.l)&&!R.wasLevelDone,L=LEVELS[R.l],nextL=LEVELS[R.l+1];
+  let title,sub;
+  if(stars===0){title="Ainda não foi desta vez";sub=`Você acertou ${c} de 5. Ouça os blocos de novo e tente outra vez: são precisos 3 acertos.`;}
+  else if(newLevel){title=`Nível ${R.l+1} concluído!`;sub=nextL?`Você dominou o ambiente ${L.env}. Liberado: Nível ${R.l+2}, ambiente ${nextL.env}.`:"Você completou todos os ambientes do curso.";}
+  else{title=stars===3?"Fase perfeita!":"Fase concluída!";sub=R.s<3?`Próxima fase liberada: ${SKILLS[R.s+1].name}.`:"Continue para fechar o nível.";}
+  frame(`<div class="result">
+    ${newLevel?`<div class="seal"><i>${L.ico}</i>Selo ${L.env}</div>`:""}
+    <div class="big-stars">${[0,1,2].map(i=>star(i<stars,i<stars?"pop":"").replace('class="pop"',`class="pop" style="animation-delay:${i*.18}s"`)).join("")}</div>
+    <h2 class="q-title">${title}</h2><p style="margin:0;color:var(--muted);max-width:46ch">${sub}</p>
+    <div class="res-grid"><div><strong>${c}/5</strong><span>acertos</span></div><div><strong>+${total}</strong><span>pontos</span></div><div><strong>${R.best}</strong><span>maior sequência</span></div></div>
+    ${bonus?`<p class="note">Inclui +${bonus} pontos por estrelas novas.</p>`:""}
+  </div>`,
+  `<button class="btn ghost" id="again">Refazer fase</button><button class="btn ${stars?"":"ghost"}" id="cont">${stars?"Voltar aos níveis":"Voltar"}</button>`,100);
+  if(stars>0)confetti(newLevel?90:50);
+  document.getElementById("again").onclick=()=>startPhase(R.l,R.s);
+  document.getElementById("cont").onclick=closeLesson;
+}
+function confetti(n){
+  try{if(window.matchMedia("(prefers-reduced-motion: reduce)").matches)return;}catch(e){}
+  const cs=getComputedStyle(document.documentElement);
+  const cols=["--c-read","--c-write","--c-listen","--c-speak","--gold"].map(v=>cs.getPropertyValue(v).trim()||"#FF7A1A");
+  const wrap=document.createElement("div");wrap.className="confetti";
+  for(let i=0;i<n;i++){const p=document.createElement("i");p.style.left=(Math.random()*100)+"%";p.style.background=cols[i%cols.length];
+    p.style.setProperty("--dx",(Math.random()*160-80)+"px");p.style.setProperty("--rot",(Math.random()*720-360)+"deg");
+    p.style.animationDelay=(Math.random()*.5)+"s";if(i%3===0)p.style.borderRadius="50%";wrap.appendChild(p);}
+  document.body.appendChild(wrap);setTimeout(()=>wrap.remove(),3200);
+}
+document.addEventListener("keydown",e=>{
+  if(box.hidden||!R)return;
+  if(e.key==="Escape"){closeLesson();return;}
+  if(e.target.tagName==="TEXTAREA")return;
+  if(/^[1-4]$/.test(e.key)){const b=box.querySelector(`.opt[data-i="${+e.key-1}"]`);if(b&&!b.disabled)b.click();}
+  if(e.key==="Enter"){const n=document.getElementById("next")||document.getElementById("check")||document.getElementById("startq");if(n&&!n.disabled&&document.activeElement!==n){e.preventDefault();n.click();}}
+});
+renderHome();
+})();
+</script>
+
+</body>
+</html>
