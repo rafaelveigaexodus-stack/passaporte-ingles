@@ -4,7 +4,16 @@ Curso de inglês para adultos brasileiros com noção básica (verbo to be e alg
 
 ## Mapa do projeto
 - `public/index.html`: o site inteiro (HTML, CSS e JavaScript num arquivo só). O conteúdo do curso fica na constante `LEVELS`.
-- `test/conteudo.test.js`: confere o conteúdo e a sintaxe. Roda antes de toda publicação (é o comando de build do Render).
+- `test/conteudo.test.js`: confere o conteúdo e a sintaxe. Roda antes de toda publicação (é o comando de build do Render) e chama `test/login.test.js`.
+- `scripts/novo-usuario.js`: gera a linha de um usuário novo para a lista `USERS`.
+
+## Login e áreas
+- Tela de entrada com usuário e senha. Cada usuário tem sua área: progresso salvo em `ingles-acelerado-v1:<id>`.
+- A lista `USERS` fica em `public/index.html` e guarda só o código embaralhado da senha (SHA-256 de `ingles-acelerado|usuario-normalizado|senha`), nunca a senha.
+- Usuário não diferencia maiúsculas, acentos nem espaços a mais. Senha diferencia.
+- Usuário atual: Rafael Veiga (id `rafael`).
+- Novo usuário: `node scripts/novo-usuario.js "Nome" "senha"`, cole a linha em `USERS`, rode o teste, publique.
+- Limite: é um site sem servidor. O login separa as áreas, mas não é um cofre: quem entende de código consegue ver a página. O progresso fica no aparelho, não sincroniza entre celular e computador. Para sincronizar, o próximo passo seria um servidor com banco de dados.
 - `ERROS.md`: erros conhecidos e como foram resolvidos.
 
 ## Estrutura do curso

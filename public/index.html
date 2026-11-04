@@ -247,6 +247,24 @@ textarea:focus{outline:none;border-color:var(--sk)}
 .foot-note{margin-top:40px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .linkish{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
 
+/* login */
+.login{min-height:100vh;display:grid;place-items:center;padding-block:32px}
+.login-card{width:100%;max-width:420px;background:var(--surface);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
+.login-top{background:linear-gradient(125deg,#FF8A3D 0%,#FF4F7B 35%,#8A3FFC 70%,#2F6BFF 100%);color:#fff;padding:28px 26px 24px;display:grid;gap:10px}
+.login-top .logo{width:46px;height:46px;border-radius:14px;background:rgba(255,255,255,.25);display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:18px}
+.login-top h1{font-size:30px;font-weight:800}
+.login-top p{margin:0;color:rgba(255,255,255,.9);font-size:15px}
+.login-form{padding:24px 26px 26px;display:grid;gap:14px}
+.login-form label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.login-form input{border:2px solid var(--line);border-radius:12px;padding:12px 14px;font:inherit;font-size:16px;background:var(--surface);color:var(--ink)}
+.login-form input:focus{outline:none;border-color:var(--accent)}
+.login-err{color:var(--bad);font-size:14px;min-height:20px;margin:0}
+.login-form .btn{width:100%;background:linear-gradient(125deg,#8A3FFC,#2F6BFF);color:#fff;padding:14px}
+.login-hint{font-size:13px;color:var(--muted);text-align:center;margin:0}
+.who-chip{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+.who-chip .av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:700;background:conic-gradient(from 200deg,var(--c-read),var(--c-write),var(--c-listen),var(--c-speak),var(--c-read))}
+.top-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+
 @media (max-width:820px){
   .hero{grid-template-columns:1fr}
   .side{grid-template-columns:repeat(3,1fr)}
@@ -258,6 +276,7 @@ textarea:focus{outline:none;border-color:var(--sk)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 
+<div class="login" id="login" hidden></div>
 <div class="wrap" id="home"></div>
 <div class="lesson" id="lesson" hidden></div>
 
@@ -478,11 +497,23 @@ LEVELS.forEach(L=>SKILLS.forEach(s=>L.phases[s.key].items.forEach(it=>{if(it.o){
 const RANKS=[[0,"Iniciante"],[200,"Em evolução"],[500,"Conversador"],[900,"Confiante"],[1400,"Fluente"]];
 const DAILY_GOAL=60;
 
-/* ---------- state (saved in this browser) ---------- */
+/* ---------- users: each one has their own area ----------
+   The password is never written here, only a scrambled code (SHA-256 of "ingles-acelerado|usuario|senha").
+   New user: node scripts/novo-usuario.js "Nome" "senha" and paste the line below. */
+const USERS=[
+ {id:"rafael",name:"Rafael Veiga",hash:"3f3691b1e6dffb53737187628b3b4e9dab4d24f51cd6a54fa350396bbe75545f"},
+];
+const normUser=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim().replace(/\s+/g," ");
+async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
+const SESSION="ingles-acelerado-sessao";
+let USER=null;
+
+/* ---------- state (saved in this browser, one area per user) ---------- */
 const KEY="ingles-acelerado-v1";
-let S={xp:0,stars:{},streak:0,last:"",today:{d:"",xp:0}};
-try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+const blank=()=>({xp:0,stars:{},streak:0,last:"",today:{d:"",xp:0}});
+let S=blank();
+function loadState(){S=blank();try{const raw=localStorage.getItem(KEY+":"+USER.id);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}touchDay();}
+function save(){if(!USER)return;try{localStorage.setItem(KEY+":"+USER.id,JSON.stringify(S));}catch(e){}}
 const dayStr=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 const today=()=>dayStr(new Date());
 function touchDay(){const t=today();if(S.today.d!==t)S.today={d:t,xp:0};}
@@ -527,10 +558,14 @@ function renderHome(){
   home.innerHTML=`
   <header class="top">
     <div class="brand"><span class="logo">EN</span>Inglês Acelerado</div>
+    <div class="top-right">
+    <span class="who-chip"><span class="av">${esc(USER.name.charAt(0))}</span>Olá, ${esc(USER.name.split(" ")[0])}</span>
+    <button class="btn ghost" id="logout" style="padding:7px 13px;font-size:14px">Sair</button>
     <div class="stats">
       <span class="stat s-pts" title="Seus pontos">${I.bolt}<b>${S.xp}</b> pontos</span>
       <span class="stat s-fire" title="Dias seguidos estudando">${I.fire}<b>${S.streak}</b> ${S.streak===1?"dia":"dias"}</span>
       <span class="stat s-rank" title="Seu título">${I.badge}${r[1]}</span>
+    </div>
     </div>
   </header>
   <section class="hero env-${li}">
@@ -565,13 +600,48 @@ function renderHome(){
         <div><h3>${s.name}</h3><p>${s.desc}</p></div>
         <div class="stars">${star(st>0)}${star(st>1)}${star(st>2)}</div></button>`;}).join("")}</div>
   </section>`;}).join("")}
-  <div class="foot-note"><span>Seu progresso fica salvo neste aparelho.</span><button class="linkish" id="reset">Recomeçar do zero</button></div>`;
+  <div class="foot-note"><span>Área de ${esc(USER.name)}. O progresso fica salvo neste aparelho.</span><button class="linkish" id="reset">Recomeçar do zero</button></div>`;
   const go=document.getElementById("go");if(go&&cur)go.onclick=()=>startPhase(cur[0],cur[1]);
   home.querySelectorAll(".gate").forEach(g=>g.onclick=()=>startPhase(+g.dataset.l,+g.dataset.s));
   const rs=document.getElementById("reset");let armed=false;
   rs.onclick=()=>{if(!armed){armed=true;rs.textContent="Toque de novo para apagar todo o progresso";setTimeout(()=>{armed=false;rs.textContent="Recomeçar do zero";},4000);return;}
-    S={xp:0,stars:{},streak:0,last:"",today:{d:today(),xp:0}};save();renderHome();};
+    S=blank();touchDay();save();renderHome();};
+  document.getElementById("logout").onclick=logout;
 }
+
+/* ---------- login ---------- */
+const loginBox=document.getElementById("login");
+function renderLogin(){
+  home.hidden=true;loginBox.hidden=false;
+  loginBox.innerHTML=`<div class="login-card">
+    <div class="login-top"><span class="logo">EN</span><h1>Inglês Acelerado</h1><p>Entre na sua área para continuar de onde parou.</p></div>
+    <form class="login-form" id="lform" novalidate>
+      <label for="lu">Usuário<input id="lu" name="usuario" autocomplete="username" autocapitalize="words" placeholder="Seu nome de usuário"></label>
+      <label for="lp">Senha<input id="lp" name="senha" type="password" autocomplete="current-password" placeholder="Sua senha"></label>
+      <p class="login-err" id="lerr" role="alert"></p>
+      <button class="btn" type="submit" id="lbtn">Entrar</button>
+      <p class="login-hint">Não tem acesso? Peça ao administrador do curso para criar sua área.</p>
+    </form></div>`;
+  const f=document.getElementById("lform"),err=document.getElementById("lerr"),btn=document.getElementById("lbtn");
+  setTimeout(()=>document.getElementById("lu").focus(),50);
+  f.onsubmit=async e=>{e.preventDefault();err.textContent="";
+    const u=document.getElementById("lu").value,p=document.getElementById("lp").value;
+    if(!u.trim()||!p){err.textContent="Preencha o usuário e a senha.";return;}
+    btn.disabled=true;btn.textContent="Entrando...";
+    let h="";try{h=await sha256("ingles-acelerado|"+normUser(u)+"|"+p);}catch(x){}
+    const found=USERS.find(x=>x.hash===h);
+    btn.disabled=false;btn.textContent="Entrar";
+    if(!found){err.textContent=h?"Usuário ou senha incorretos. Confira e tente de novo.":"Este navegador não conseguiu verificar a senha. Use o Google Chrome atualizado.";return;}
+    try{localStorage.setItem(SESSION,found.id);}catch(x){}
+    enter(found);};
+}
+function enter(u){
+  USER=u;
+  /* first login of the first user keeps progress made before login existed */
+  try{if(u===USERS[0]&&!localStorage.getItem(KEY+":"+u.id)){const old=localStorage.getItem(KEY);if(old)localStorage.setItem(KEY+":"+u.id,old);}}catch(x){}
+  loadState();loginBox.hidden=true;loginBox.innerHTML="";home.hidden=false;renderHome();window.scrollTo(0,0);
+}
+function logout(){try{localStorage.removeItem(SESSION);}catch(x){}USER=null;S=blank();home.innerHTML="";renderLogin();}
 
 /* ---------- lesson ---------- */
 const box=document.getElementById("lesson");
@@ -736,7 +806,8 @@ document.addEventListener("keydown",e=>{
   if(/^[1-4]$/.test(e.key)){const b=box.querySelector(`.opt[data-i="${+e.key-1}"]`);if(b&&!b.disabled)b.click();}
   if(e.key==="Enter"){const n=document.getElementById("next")||document.getElementById("check")||document.getElementById("startq");if(n&&!n.disabled&&document.activeElement!==n){e.preventDefault();n.click();}}
 });
-renderHome();
+(function boot(){let id=null;try{id=localStorage.getItem(SESSION);}catch(e){}
+  const u=USERS.find(x=>x.id===id);if(u)enter(u);else renderLogin();})();
 })();
 </script>
 

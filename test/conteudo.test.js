@@ -47,3 +47,4 @@ LEVELS.forEach((L, li) => {
 
 if (falhas) { console.error(`\n${falhas} problema(s). Não publique.`); process.exit(1); }
 console.log("Conteúdo do curso OK: " + LEVELS.length + " níveis, " + LEVELS.length * 20 + " exercícios.");
+require("./login.test.js");
