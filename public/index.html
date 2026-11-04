@@ -247,6 +247,26 @@ textarea:focus{outline:none;border-color:var(--sk)}
 .foot-note{margin-top:40px;color:var(--muted);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .linkish{background:none;border:0;color:var(--muted);text-decoration:underline;cursor:pointer;font-size:13px;padding:0}
 
+/* module picker */
+.modules{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:2px 0 14px}
+.mod{text-align:left;background:var(--surface);border:2px solid transparent;border-radius:var(--r);padding:14px 16px;display:grid;gap:10px;cursor:pointer;box-shadow:0 1px 2px rgba(23,20,43,.05);transition:border-color .15s ease,transform .15s ease;min-width:0}
+.mod:hover:not(.locked){transform:translateY(-1px);border-color:var(--accent)}
+.mod.on{border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+.mod.locked{cursor:not-allowed;opacity:.7}
+.mod-top{display:flex;gap:12px;align-items:flex-start}
+.mod-top > div{flex:1;min-width:0}
+.mod-num{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-display);font-weight:800;font-size:20px;color:#fff;
+  background:conic-gradient(from 200deg,var(--c-read),var(--c-write),var(--c-listen),var(--c-speak),var(--c-read))}
+.mod.locked .mod-num{background:var(--surface-2);color:var(--muted)}
+.mod-title{font-family:var(--f-display);font-weight:700;font-size:18px}
+.mod-tag{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--accent-soft);color:var(--accent);padding:2px 8px;border-radius:99px;vertical-align:middle;margin-left:4px}
+.mod-sub{font-size:13px;color:var(--muted)}
+.mod .bar i{background:linear-gradient(90deg,var(--c-write),var(--c-read))}
+.mod-foot{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.mod-msg{margin:-6px 0 10px;color:var(--c-listen);font-size:14px;font-weight:600;min-height:0}
+.mod-msg:empty{display:none}
+@media (max-width:620px){.modules{grid-template-columns:1fr}}
+
 /* login */
 .login{min-height:100vh;display:grid;place-items:center;padding-block:32px}
 .login-card{width:100%;max-width:420px;background:var(--surface);border-radius:24px;box-shadow:var(--shadow);overflow:hidden}
@@ -491,17 +511,225 @@ const LEVELS=[
  ]},
 }},
 ];
-/* shuffle answer options once per load, keeping the right one */
-LEVELS.forEach(L=>SKILLS.forEach(s=>L.phases[s.key].items.forEach(it=>{if(it.o){const right=it.o[it.a];it.o=shuffle(it.o.slice());it.a=it.o.indexOf(right);}})));
 
-const RANKS=[[0,"Iniciante"],[200,"Em evolução"],[500,"Conversador"],[900,"Confiante"],[1400,"Fluente"]];
+/* ---------- MÓDULO 2: same settings, one step up (past, future, comparisons, longer dialogues) ---------- */
+const LEVELS2=[
+{env:"Família",ico:I.family,sub:"Contar o que a família fez, descrever pessoas e falar de lembranças, no passado.",
+ phases:{
+ read:{chunks:[["We had a great time.","Nos divertimos muito."],["He looks like his dad.","Ele é parecido com o pai."],["She's tall with curly hair.","Ela é alta, de cabelo cacheado."],["When I was a kid...","Quando eu era criança..."],["We used to...","Nós costumávamos..."],["We got together for...","Nos reunimos para..."]],
+  items:[
+  {t:"read",text:"A: How was your weekend?\nB: Great! My whole family got together for my grandma's birthday.\nA: Nice! How old is she now?\nB: Eighty-five, and she still dances better than all of us!",pt:"A: Como foi seu fim de semana?\nB: Ótimo! A família toda se reuniu no aniversário da minha avó.\nA: Que legal! Quantos anos ela tem agora?\nB: Oitenta e cinco, e ainda dança melhor que todos nós!",q:"O que aconteceu no fim de semana?",o:["A família se reuniu no aniversário da avó","A avó viajou com a família","B dançou numa festa do trabalho","A família levou a avó ao médico"],a:0},
+  {t:"read",text:"My son looks like his dad, but he has my eyes. He's tall for his age and very shy.",pt:"Meu filho é parecido com o pai, mas tem os meus olhos. Ele é alto para a idade e muito tímido.",q:"Como é o filho?",o:["Alto para a idade e tímido","Baixo e extrovertido","Parecido só com a mãe","Tem os olhos do pai"],a:0},
+  {t:"read",text:"When I was a kid, we used to spend every summer at my uncle's farm. We swam in the river and rode horses.",pt:"Quando eu era criança, passávamos todo verão na fazenda do meu tio. Nadávamos no rio e andávamos a cavalo.",q:"O que faziam no verão?",o:["Iam à fazenda do tio","Viajavam para a praia","Ficavam em casa","Trabalhavam na cidade"],a:0},
+  {t:"read",text:"A: Did you call your mom yesterday?\nB: No, I forgot. I'll call her tonight.\nA: Don't forget again!\nB: I won't, I promise.",pt:"A: Você ligou para sua mãe ontem?\nB: Não, esqueci. Vou ligar para ela hoje à noite.\nA: Não esqueça de novo!\nB: Não vou esquecer, prometo.",q:"Quando B vai ligar para a mãe?",o:["Hoje à noite","Ontem","Amanhã de manhã","Não vai ligar"],a:0},
+  {t:"read",text:"My sister moved to Portugal last year. She works as a nurse there, and we talk on video every Sunday.",pt:"Minha irmã se mudou para Portugal no ano passado. Ela trabalha como enfermeira lá, e conversamos por vídeo todo domingo.",q:"Como falam com a irmã?",o:["Por vídeo, todo domingo","Por carta, todo mês","Só no Natal","Por telefone, todo dia"],a:0},
+  {t:"read",text:"A: Who's that in the photo?\nB: That's my cousin Rita. She's the one with curly hair.\nA: She looks just like you!\nB: Everybody says that.",pt:"A: Quem é essa na foto?\nB: É minha prima Rita. É aquela de cabelo cacheado.\nA: Ela é a sua cara!\nB: Todo mundo diz isso.",q:"O que A achou da prima?",o:["Muito parecida com B","Mais velha que B","Bem diferente de B","Mais alta que B"],a:0},
+ ]},
+ write:{chunks:[["I visited my parents last weekend.","Visitei meus pais no fim de semana passado."],["She looks like her mom.","Ela é parecida com a mãe."],["We used to live in São Paulo.","Morávamos em São Paulo."],["My brother is taller than me.","Meu irmão é mais alto que eu."],["I'm going to visit my grandma.","Vou visitar minha avó."],["We had a great time.","Nos divertimos muito."]],
+  items:[
+  {t:"build",pt:"Visitei meus pais no fim de semana passado.",ans:["I","visited","my","parents","last","weekend."],x:["visit","past"]},
+  {t:"build",pt:"Ela é parecida com a mãe.",ans:["She","looks","like","her","mom."],x:["look","seems"]},
+  {t:"build",pt:"Nós morávamos em São Paulo.",ans:["We","used","to","live","in","São","Paulo."],x:["use","lived"]},
+  {t:"type",pt:"Nos divertimos muito.",acc:["we had a great time","we had a good time","we had a lot of fun","we had fun","we had so much fun"],show:"We had a great time."},
+  {t:"build",pt:"Meu irmão é mais alto que eu.",ans:["My","brother","is","taller","than","me."],x:["more","then"]},
+  {t:"type",pt:"Vou visitar minha avó amanhã.",acc:["i'm going to visit my grandma tomorrow","i am going to visit my grandma tomorrow","i'll visit my grandma tomorrow","i will visit my grandma tomorrow","i'm going to visit my grandmother tomorrow","i am going to visit my grandmother tomorrow","i'll visit my grandmother tomorrow","i will visit my grandmother tomorrow"],show:"I'm going to visit my grandma tomorrow."},
+ ]},
+ listen:{chunks:[["How was your weekend?","Como foi seu fim de semana?"],["We went to my aunt's house.","Fomos à casa da minha tia."],["She's the one with glasses.","É aquela de óculos."],["They got married last year.","Eles se casaram ano passado."],["I miss them a lot.","Sinto muita falta deles."],["Say hi to your family!","Manda um abraço pra sua família!"]],
+  items:[
+  {t:"listen",say:"How was your weekend?",q:"O que você ouviu?",o:["How was your weekend?","How is your weekend?","How was your week?","Where was your weekend?"],a:0},
+  {t:"listen",say:"We went to my aunt's house.",q:"O que você ouviu?",o:["We went to my aunt's house.","We want to go to my aunt's house.","We went to my uncle's house.","We went to my mom's house."],a:0},
+  {t:"listen",say:"She's the one with glasses.",q:"Quem é a pessoa?",o:["A de óculos","A de vestido","A mais alta","A que está de costas"],a:0,mean:true},
+  {t:"listen",say:"They got married last year.",q:"O que você ouviu?",o:["They got married last year.","They get married next year.","They got married last week.","They got engaged last year."],a:0},
+  {t:"lbuild",say:"I miss them a lot.",ans:["I","miss","them","a","lot."],x:["lose","much"]},
+  {t:"listen",say:"Say hi to your family!",q:"O que a pessoa disse?",o:["Manda um abraço pra sua família!","Diga oi para mim!","Traga sua família!","Sua família mandou um oi!"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["We had a great time.","Nos divertimos muito."],["He looks like his dad.","Ele é parecido com o pai."],["When I was a kid, I lived in Rio.","Quando eu era criança, morava no Rio."],["My sister is older than me.","Minha irmã é mais velha que eu."],["I'm going to visit my parents.","Vou visitar meus pais."],["Say hi to your family!","Manda um abraço pra sua família!"]],
+  items:[
+  {t:"speak",en:"We had a great time.",pt:"Nos divertimos muito.",pr:"uí réd a grêit táim"},
+  {t:"speak",en:"He looks like his dad.",pt:"Ele é parecido com o pai.",pr:"rí lúks láik riz déd"},
+  {t:"speak",en:"When I was a kid, I lived in Rio.",pt:"Quando eu era criança, morava no Rio.",pr:"uén ái uóz a kid, ái livd in ríou"},
+  {t:"speak",en:"My sister is older than me.",pt:"Minha irmã é mais velha que eu.",pr:"mái síster iz ôulder dhén mí",tip:"No TH de “than”, língua entre os dentes, com voz."},
+  {t:"speak",en:"I'm going to visit my parents.",pt:"Vou visitar meus pais.",pr:"áim gôuin tu vízit mái pérents"},
+  {t:"speak",en:"Say hi to your family!",pt:"Manda um abraço pra sua família!",pr:"sêi rái tu iór fémili"},
+ ]},
+}},
+{env:"Shopping",ico:I.shop,sub:"Comparar produtos, comprar pela internet, reclamar de defeito e pedir troca ou reembolso.",
+ phases:{
+ read:{chunks:[["It's cheaper than...","É mais barato que..."],["It doesn't work.","Não está funcionando."],["I'd like a refund.","Eu gostaria do reembolso."],["It arrived damaged.","Chegou danificado."],["free shipping","frete grátis"],["Is it worth it?","Vale a pena?"]],
+  items:[
+  {t:"read",text:"A: Which one is better?\nB: This one is cheaper, but that one is better quality.\nA: Is it worth paying more?\nB: Honestly, yes. It lasts much longer.",pt:"A: Qual é melhor?\nB: Este é mais barato, mas aquele tem mais qualidade.\nA: Vale a pena pagar mais?\nB: Sinceramente, sim. Dura muito mais.",q:"O que B recomenda?",o:["Pagar mais pelo de melhor qualidade","Comprar o mais barato","Não comprar nenhum","Esperar uma promoção"],a:0},
+  {t:"read",text:"I bought a phone online last week. It arrived yesterday, but the screen was damaged.",pt:"Comprei um celular pela internet semana passada. Chegou ontem, mas a tela estava danificada.",q:"Qual foi o problema?",o:["A tela chegou danificada","O celular não chegou","Chegou o modelo errado","A bateria não carrega"],a:0},
+  {t:"read",text:"A: Hi, I bought this blender here on Monday, and it doesn't work.\nB: I'm sorry about that. Would you like a replacement or a refund?\nA: A refund, please.",pt:"A: Oi, comprei este liquidificador aqui na segunda e ele não funciona.\nB: Sinto muito. Você prefere trocar ou receber o dinheiro de volta?\nA: O dinheiro de volta, por favor.",q:"O que o cliente escolheu?",o:["O dinheiro de volta","Trocar por outro","Mandar consertar","Um desconto"],a:0},
+  {t:"read",text:"Free shipping on orders over 100 dollars. Delivery in 3 to 5 business days.",pt:"Frete grátis em pedidos acima de 100 dólares. Entrega em 3 a 5 dias úteis.",q:"Quando o frete é grátis?",o:["Em compras acima de US$ 100","Em qualquer compra","Só com entrega em 3 dias","Nunca"],a:0},
+  {t:"read",text:"A: These shoes are too tight. Do you have a bigger size?\nB: We're out of size 42, but we can order it for you.\nA: How long will it take?\nB: About a week.",pt:"A: Estes sapatos estão apertados. Tem um número maior?\nB: Estamos sem o 42, mas podemos encomendar para você.\nA: Quanto tempo vai levar?\nB: Mais ou menos uma semana.",q:"Quanto tempo para chegar o 42?",o:["Cerca de uma semana","Amanhã","Um mês","Não vai chegar"],a:0},
+  {t:"read",text:"I usually compare prices on three websites before I buy anything. Last month I saved almost 200 reais on a TV.",pt:"Eu geralmente comparo preços em três sites antes de comprar qualquer coisa. Mês passado economizei quase 200 reais numa TV.",q:"Quanto ela economizou na TV?",o:["Quase 200 reais","Quase 300 reais","Nada","Mais de 500 reais"],a:0},
+ ]},
+ write:{chunks:[["This one is cheaper.","Este é mais barato."],["It doesn't work.","Não funciona."],["I'd like a refund.","Quero o reembolso."],["I bought it last week.","Comprei semana passada."],["Can I exchange it?","Posso trocar?"],["It's too expensive.","Está caro demais."]],
+  items:[
+  {t:"build",pt:"Este é mais barato que aquele.",ans:["This","one","is","cheaper","than","that","one."],x:["more","then"]},
+  {t:"build",pt:"Eu comprei isto semana passada.",ans:["I","bought","this","last","week."],x:["buyed","past"]},
+  {t:"type",pt:"Não está funcionando.",acc:["it doesn't work","it does not work","it's not working","it is not working","it isn't working"],show:"It doesn't work."},
+  {t:"build",pt:"Posso trocar por um tamanho maior?",ans:["Can","I","exchange","it","for","a","bigger","size?"],x:["more","change"]},
+  {t:"type",pt:"Eu gostaria de um reembolso.",acc:["i'd like a refund","i would like a refund","i'd like a refund please","i would like a refund please","can i get a refund","can i have a refund"],show:"I'd like a refund."},
+  {t:"build",pt:"É caro demais para mim.",ans:["It's","too","expensive","for","me."],x:["very","to"]},
+ ]},
+ listen:{chunks:[["Do you have the receipt?","Você tem a nota?"],["It's out of stock.","Está em falta."],["It's twenty percent off.","Está com 20% de desconto."],["Would you like to pay in installments?","Quer parcelar?"],["It comes with a warranty.","Vem com garantia."],["We'll send it by Friday.","Enviamos até sexta."]],
+  items:[
+  {t:"listen",say:"Do you have the receipt?",q:"O que você ouviu?",o:["Do you have the receipt?","Do you have the recipe?","Did you have the receipt?","Do you have a receipt bag?"],a:0},
+  {t:"listen",say:"It's out of stock.",q:"O que o vendedor disse?",o:["Está em falta","Está fora da loja","Está em promoção","Tem no estoque"],a:0,mean:true},
+  {t:"listen",say:"It's twenty percent off.",q:"Qual é o desconto?",o:["20%","12%","70%","Sem desconto"],a:0,mean:true},
+  {t:"lbuild",say:"It comes with a warranty.",ans:["It","comes","with","a","warranty."],x:["come","guarantee"]},
+  {t:"listen",say:"Would you like to pay in installments?",q:"O que você ouviu?",o:["Would you like to pay in installments?","Would you like to pay in cash?","Would you like to pay now?","Would you like to buy installments?"],a:0},
+  {t:"lbuild",say:"We'll send it by Friday.",ans:["We'll","send","it","by","Friday."],x:["sent","on"]},
+ ]},
+ speak:{chunks:[["This one is cheaper.","Este é mais barato."],["It doesn't work.","Não funciona."],["I'd like a refund, please.","Quero o reembolso, por favor."],["I bought it last week.","Comprei semana passada."],["Is it worth it?","Vale a pena?"],["Can I exchange it?","Posso trocar?"]],
+  items:[
+  {t:"speak",en:"This one is cheaper.",pt:"Este é mais barato.",pr:"dhis uân iz tchíper"},
+  {t:"speak",en:"It doesn't work.",pt:"Não funciona.",pr:"it dâzent uârk"},
+  {t:"speak",en:"I'd like a refund, please.",pt:"Quero o reembolso, por favor.",pr:"áid láik a rífând, plíz"},
+  {t:"speak",en:"I bought it last week.",pt:"Comprei semana passada.",pr:"ái bót it lést uík"},
+  {t:"speak",en:"Is it worth it?",pt:"Vale a pena?",pr:"iz it uârth it?",tip:"No TH de “worth”, ponta da língua entre os dentes, soprando sem voz."},
+  {t:"speak",en:"Can I exchange it?",pt:"Posso trocar?",pr:"kén ái ikstchêindj it?"},
+ ]},
+}},
+{env:"Restaurante",ico:I.food,sub:"Reservar por telefone, explicar restrições, reclamar com educação e dividir a conta.",
+ phases:{
+ read:{chunks:[["I'd like to make a reservation.","Eu gostaria de fazer uma reserva."],["Under the name...","No nome de..."],["I'm vegetarian.","Sou vegetariano."],["This isn't what I ordered.","Não foi isso que eu pedi."],["Can we split the bill?","Podemos dividir a conta?"],["It was a bit cold.","Estava um pouco frio."]],
+  items:[
+  {t:"read",text:"A: Hi, I'd like to make a reservation for Saturday.\nB: Sure. For how many people?\nA: Six, at 8 p.m.\nB: Perfect. Under what name?\nA: Costa.",pt:"A: Oi, eu gostaria de fazer uma reserva para sábado.\nB: Claro. Para quantas pessoas?\nA: Seis, às 20h.\nB: Perfeito. Em nome de quem?\nA: Costa.",q:"Qual é a reserva?",o:["Sábado, 6 pessoas, às 20h","Sexta, 8 pessoas, às 18h","Sábado, 8 pessoas, às 18h","Domingo, 6 pessoas, às 20h"],a:0},
+  {t:"read",text:"A: Excuse me, this isn't what I ordered. I asked for the chicken, not the fish.\nB: I'm so sorry. I'll bring the right dish right away.",pt:"A: Com licença, não foi isso que eu pedi. Pedi o frango, não o peixe.\nB: Mil desculpas. Vou trazer o prato certo agora mesmo.",q:"Qual foi o problema?",o:["Veio peixe em vez de frango","Veio frango em vez de peixe","O prato estava frio","O prato demorou muito"],a:0},
+  {t:"read",text:"I'm vegetarian, so I always ask if the soup has meat or chicken stock in it.",pt:"Sou vegetariana, então sempre pergunto se a sopa tem carne ou caldo de frango.",q:"Por que ela pergunta sobre a sopa?",o:["Porque é vegetariana","Porque é alérgica a sopa","Porque não gosta de sopa quente","Porque está de dieta"],a:0},
+  {t:"read",text:"A: How was everything?\nB: The pasta was delicious, but the steak was a bit cold.\nA: I'm sorry to hear that. Dessert is on the house.",pt:"A: Estava tudo bem?\nB: A massa estava deliciosa, mas o bife estava um pouco frio.\nA: Sinto muito. A sobremesa é por conta da casa.",q:"O que o restaurante ofereceu?",o:["Sobremesa grátis","Outro bife","Desconto na massa","Nada"],a:0},
+  {t:"read",text:"A: Can we split the bill?\nB: Of course. Would you like to split it equally or pay separately?\nA: Separately, please.",pt:"A: Podemos dividir a conta?\nB: Claro. Vocês querem dividir igualmente ou cada um paga o seu?\nA: Cada um paga o seu, por favor.",q:"Como vão pagar?",o:["Cada um paga o que consumiu","Dividir igualmente","Um paga tudo","Pagar depois"],a:0},
+  {t:"read",text:"We went to a new Japanese restaurant last night. The food was amazing, but we waited forty minutes for a table.",pt:"Fomos a um restaurante japonês novo ontem à noite. A comida estava incrível, mas esperamos quarenta minutos por uma mesa.",q:"Qual foi o ponto negativo?",o:["Esperaram 40 minutos por mesa","A comida estava ruim","Era caro demais","O garçom foi grosso"],a:0},
+ ]},
+ write:{chunks:[["I'd like to make a reservation.","Eu gostaria de fazer uma reserva."],["Is there meat in this?","Isso tem carne?"],["I'm allergic to peanuts.","Sou alérgico a amendoim."],["This isn't what I ordered.","Não foi isso que eu pedi."],["Can we split the bill?","Podemos dividir a conta?"],["Could we have some more bread?","Pode trazer mais pão?"]],
+  items:[
+  {t:"build",pt:"Eu gostaria de fazer uma reserva.",ans:["I'd","like","to","make","a","reservation."],x:["do","booking"]},
+  {t:"build",pt:"Isso tem carne?",ans:["Is","there","meat","in","this?"],x:["have","meet"]},
+  {t:"type",pt:"Sou alérgico a amendoim.",acc:["i'm allergic to peanuts","i am allergic to peanuts","i'm allergic to peanut","i am allergic to peanut"],show:"I'm allergic to peanuts."},
+  {t:"build",pt:"Não foi isso que eu pedi.",ans:["This","isn't","what","I","ordered."],x:["that","order"]},
+  {t:"type",pt:"Podemos dividir a conta?",acc:["can we split the bill","can we split the check","could we split the bill","could we split the check"],show:"Can we split the bill?"},
+  {t:"build",pt:"Pode trazer mais pão, por favor?",ans:["Could","we","have","some","more","bread,","please?"],x:["any","bred"]},
+ ]},
+ listen:{chunks:[["How many people?","Quantas pessoas?"],["Under what name?","Em nome de quem?"],["It'll be about twenty minutes.","Vai levar uns vinte minutos."],["Is everything OK here?","Está tudo certo por aqui?"],["It's on the house.","É por conta da casa."],["Would you like to see the dessert menu?","Quer ver o cardápio de sobremesas?"]],
+  items:[
+  {t:"listen",say:"How many people?",q:"O que você ouviu?",o:["How many people?","How much people?","How many places?","How many peoples?"],a:0},
+  {t:"listen",say:"Under what name?",q:"O que perguntaram?",o:["Em nome de quem é a reserva?","Qual é o seu número?","Debaixo de qual mesa?","Qual é o nome do prato?"],a:0,mean:true},
+  {t:"listen",say:"It'll be about twenty minutes.",q:"Quanto tempo vai levar?",o:["Uns 20 minutos","Uns 2 minutos","Uns 12 minutos","Uma hora"],a:0,mean:true},
+  {t:"lbuild",say:"Is everything OK here?",ans:["Is","everything","OK","here?"],x:["all","there"]},
+  {t:"listen",say:"It's on the house.",q:"O que o garçom quis dizer?",o:["É por conta da casa","Está em cima da casa","É para levar para casa","É o prato da casa"],a:0,mean:true},
+  {t:"lbuild",say:"Would you like to see the dessert menu?",ans:["Would","you","like","to","see","the","dessert","menu?"],x:["desert","watch"]},
+ ]},
+ speak:{chunks:[["I'd like to make a reservation.","Eu gostaria de fazer uma reserva."],["I'm allergic to peanuts.","Sou alérgico a amendoim."],["This isn't what I ordered.","Não foi isso que eu pedi."],["Can we split the bill?","Podemos dividir a conta?"],["The food was amazing.","A comida estava incrível."],["Could we have some more bread?","Pode trazer mais pão?"]],
+  items:[
+  {t:"speak",en:"I'd like to make a reservation.",pt:"Eu gostaria de fazer uma reserva.",pr:"áid láik tu mêik a rezervêixan"},
+  {t:"speak",en:"I'm allergic to peanuts.",pt:"Sou alérgico a amendoim.",pr:"áim alérdjik tu pínâts"},
+  {t:"speak",en:"This isn't what I ordered.",pt:"Não foi isso que eu pedi.",pr:"dhis ízent uót ái órderd"},
+  {t:"speak",en:"Can we split the bill?",pt:"Podemos dividir a conta?",pr:"kén uí split dâ bil?"},
+  {t:"speak",en:"The food was amazing.",pt:"A comida estava incrível.",pr:"dâ fúd uóz améizin"},
+  {t:"speak",en:"Could we have some more bread?",pt:"Pode trazer mais pão?",pr:"kúd uí rév sâm mór bréd?"},
+ ]},
+}},
+{env:"Lazer",ico:I.fun,sub:"Convidar, aceitar e recusar com educação, contar como foi um passeio e fazer planos.",
+ phases:{
+ read:{chunks:[["Do you want to join us?","Quer ir com a gente?"],["I'd love to, but...","Eu adoraria, mas..."],["I've never been to...","Nunca fui a..."],["It was totally worth it.","Valeu muito a pena."],["What are you up to?","O que você vai fazer?"],["Let's keep in touch.","Vamos manter contato."]],
+  items:[
+  {t:"read",text:"A: We're going hiking on Sunday. Do you want to join us?\nB: I'd love to, but I promised to help my brother move.\nA: No problem. Maybe next time!",pt:"A: Vamos fazer trilha no domingo. Quer ir com a gente?\nB: Adoraria, mas prometi ajudar meu irmão na mudança.\nA: Sem problema. Fica para a próxima!",q:"Por que B não vai?",o:["Prometeu ajudar o irmão na mudança","Não gosta de trilha","Vai trabalhar no domingo","Está doente"],a:0},
+  {t:"read",text:"Last month I went to Bonito for the first time. I'd never seen such clear water. It was totally worth it.",pt:"Mês passado fui a Bonito pela primeira vez. Nunca tinha visto uma água tão cristalina. Valeu muito a pena.",q:"O que ela achou da viagem?",o:["Valeu muito a pena","Foi cara demais","A água estava suja","Já tinha ido antes"],a:0},
+  {t:"read",text:"A: Have you ever been to a live concert?\nB: Never! But I'm going to see my favorite band in March.\nA: That's awesome!",pt:"A: Você já foi a um show ao vivo?\nB: Nunca! Mas vou ver minha banda favorita em março.\nA: Que demais!",q:"O que B vai fazer em março?",o:["Ver sua banda favorita ao vivo","Tocar num show","Viajar para fora","Comprar um instrumento"],a:0},
+  {t:"read",text:"We were going to have a barbecue on Saturday, but it rained all day, so we watched movies at home instead.",pt:"A gente ia fazer um churrasco no sábado, mas choveu o dia todo, então vimos filmes em casa.",q:"O que fizeram no sábado?",o:["Viram filmes em casa por causa da chuva","Fizeram churrasco na chuva","Foram ao cinema","Adiaram tudo para domingo"],a:0},
+  {t:"read",text:"A: What are you up to this weekend?\nB: Nothing special. I'll probably sleep late and go to the beach.\nA: Sounds relaxing!",pt:"A: O que você vai fazer neste fim de semana?\nB: Nada de especial. Provavelmente vou dormir até tarde e ir à praia.\nA: Parece relaxante!",q:"Qual o plano de B?",o:["Dormir até tarde e ir à praia","Trabalhar no fim de semana","Viajar com amigos","Ficar o dia todo em casa"],a:0},
+  {t:"read",text:"I started running six months ago. At first I could only run two kilometers. Now I can run ten.",pt:"Comecei a correr há seis meses. No começo só conseguia correr dois quilômetros. Agora consigo correr dez.",q:"Quanto ela corre hoje?",o:["10 km","2 km","6 km","12 km"],a:0},
+ ]},
+ write:{chunks:[["Do you want to join us?","Quer ir com a gente?"],["I'd love to, but I can't.","Adoraria, mas não posso."],["I've never been there.","Nunca fui lá."],["We went to the beach yesterday.","Fomos à praia ontem."],["What are you up to this weekend?","O que vai fazer no fim de semana?"],["It was totally worth it.","Valeu muito a pena."]],
+  items:[
+  {t:"build",pt:"Quer ir com a gente?",ans:["Do","you","want","to","join","us?"],x:["go","we"]},
+  {t:"build",pt:"Eu adoraria, mas não posso.",ans:["I'd","love","to,","but","I","can't."],x:["will","don't"]},
+  {t:"type",pt:"Nunca fui lá.",acc:["i've never been there","i have never been there","i never went there","i've never been","i have never been"],show:"I've never been there."},
+  {t:"build",pt:"Nós fomos à praia ontem.",ans:["We","went","to","the","beach","yesterday."],x:["go","at"]},
+  {t:"type",pt:"O que você vai fazer neste fim de semana?",acc:["what are you up to this weekend","what are you doing this weekend","what are you going to do this weekend","what will you do this weekend","what are you doing on the weekend","what are you going to do on the weekend"],show:"What are you up to this weekend?"},
+  {t:"build",pt:"Valeu muito a pena.",ans:["It","was","totally","worth","it."],x:["were","wort"]},
+ ]},
+ listen:{chunks:[["Are you coming tonight?","Você vem hoje à noite?"],["I'm afraid I can't make it.","Infelizmente não vou conseguir ir."],["How was the trip?","Como foi a viagem?"],["We should do this more often.","Devíamos fazer isso mais vezes."],["I'll pick you up at seven.","Te pego às sete."],["Let's keep in touch!","Vamos manter contato!"]],
+  items:[
+  {t:"listen",say:"Are you coming tonight?",q:"O que você ouviu?",o:["Are you coming tonight?","Are you coming tomorrow?","Are you cooking tonight?","Are you calling tonight?"],a:0},
+  {t:"listen",say:"I'm afraid I can't make it.",q:"O que a pessoa disse?",o:["Infelizmente não vou conseguir ir","Estou com medo de ir","Não sei fazer isso","Vou chegar atrasado"],a:0,mean:true},
+  {t:"listen",say:"How was the trip?",q:"O que você ouviu?",o:["How was the trip?","How was the ship?","How is the trip?","How long was the trip?"],a:0},
+  {t:"lbuild",say:"We should do this more often.",ans:["We","should","do","this","more","often."],x:["make","many"]},
+  {t:"listen",say:"I'll pick you up at seven.",q:"Qual foi o combinado?",o:["Eu te pego às 7","Você me pega às 7","Eu te ligo às 7","Eu chego às 11"],a:0,mean:true},
+  {t:"listen",say:"Let's keep in touch!",q:"O que a pessoa disse?",o:["Vamos manter contato!","Vamos nos abraçar!","Vamos ficar aqui!","Vamos marcar logo!"],a:0,mean:true},
+ ]},
+ speak:{chunks:[["Do you want to join us?","Quer ir com a gente?"],["I'd love to, but I can't.","Adoraria, mas não posso."],["I've never been there.","Nunca fui lá."],["It was totally worth it.","Valeu muito a pena."],["I'll pick you up at seven.","Te pego às sete."],["Let's keep in touch!","Vamos manter contato!"]],
+  items:[
+  {t:"speak",en:"Do you want to join us?",pt:"Quer ir com a gente?",pr:"du iú uónt tu djóin âs?"},
+  {t:"speak",en:"I'd love to, but I can't.",pt:"Adoraria, mas não posso.",pr:"áid lâv tu, bât áiként"},
+  {t:"speak",en:"I've never been there.",pt:"Nunca fui lá.",pr:"áiv néver bín dhér"},
+  {t:"speak",en:"It was totally worth it.",pt:"Valeu muito a pena.",pr:"it uóz tôutali uârth it",tip:"No TH de “worth”, ponta da língua entre os dentes, soprando sem voz."},
+  {t:"speak",en:"I'll pick you up at seven.",pt:"Te pego às sete.",pr:"áil pik iú âp ét séven"},
+  {t:"speak",en:"Let's keep in touch!",pt:"Vamos manter contato!",pr:"léts kíp in tâtch"},
+ ]},
+}},
+{env:"Trabalho",ico:I.work,sub:"Dar opinião em reunião, discordar com educação, e-mails formais e entrevista de emprego.",
+ phases:{
+ read:{chunks:[["In my opinion...","Na minha opinião..."],["I see your point, but...","Entendo seu ponto, mas..."],["I'm writing to...","Escrevo para... (e-mail)"],["I look forward to hearing from you.","Aguardo seu retorno."],["My main strength is...","Meu ponto forte é..."],["Could you clarify...?","Você poderia esclarecer...?"]],
+  items:[
+  {t:"read",text:"A: I think we should cut the marketing budget.\nB: I see your point, but in my opinion that could hurt our sales.\nA: What do you suggest?\nB: Let's cut travel costs instead.",pt:"A: Acho que devemos cortar o orçamento de marketing.\nB: Entendo seu ponto, mas na minha opinião isso pode prejudicar as vendas.\nA: O que você sugere?\nB: Vamos cortar as despesas de viagem.",q:"O que B sugere cortar?",o:["Despesas de viagem","O orçamento de marketing","Salários","Nada"],a:0},
+  {t:"read",text:"Dear Mr. Lopes,\nI'm writing to confirm our meeting on Monday at 10 a.m. Please let me know if you need to reschedule.\nI look forward to hearing from you.\nBest regards,\nAna Souza",pt:"Prezado Sr. Lopes,\nEscrevo para confirmar nossa reunião de segunda às 10h. Por favor, me avise se precisar remarcar.\nAguardo seu retorno.\nAtenciosamente,\nAna Souza",q:"Qual é o objetivo do e-mail?",o:["Confirmar a reunião de segunda às 10h","Cancelar a reunião","Pedir um aumento","Marcar uma reunião nova na terça"],a:0},
+  {t:"read",text:"A: Tell me about yourself.\nB: I've worked in sales for eight years. My main strength is building relationships with clients.\nA: And your weakness?\nB: Sometimes I take on too many tasks.",pt:"A: Fale sobre você.\nB: Trabalho com vendas há oito anos. Meu ponto forte é criar relacionamento com clientes.\nA: E seu ponto fraco?\nB: Às vezes assumo tarefas demais.",q:"Qual é o ponto forte de B?",o:["Criar relacionamento com clientes","Organizar planilhas","Falar em público","Trabalhar sozinho"],a:0},
+  {t:"read",text:"Sales grew 15% this quarter, mainly because of our new online channel. However, costs also went up.",pt:"As vendas cresceram 15% neste trimestre, principalmente por causa do nosso novo canal online. Porém, os custos também subiram.",q:"O que fez as vendas crescerem?",o:["O novo canal online","A queda dos custos","Novos vendedores","Uma promoção"],a:0},
+  {t:"read",text:"A: Could you clarify the deadline?\nB: Sure. The first draft is due Friday, and the final version by the end of the month.",pt:"A: Você poderia esclarecer o prazo?\nB: Claro. A primeira versão é para sexta, e a versão final até o fim do mês.",q:"Quando é a primeira versão?",o:["Sexta-feira","No fim do mês","Hoje","Segunda-feira"],a:0},
+  {t:"read",text:"I'm afraid I won't be able to attend the meeting tomorrow. Could someone send me the notes afterwards?",pt:"Infelizmente não vou poder participar da reunião amanhã. Alguém poderia me mandar as anotações depois?",q:"O que a pessoa pede?",o:["Que mandem as anotações da reunião","Que adiem a reunião","Que façam a reunião hoje","Que a incluam na apresentação"],a:0},
+ ]},
+ write:{chunks:[["In my opinion, we should wait.","Na minha opinião, devemos esperar."],["I see your point, but...","Entendo seu ponto, mas..."],["I'm writing to confirm the meeting.","Escrevo para confirmar a reunião."],["I've worked in sales for eight years.","Trabalho com vendas há oito anos."],["I won't be able to attend.","Não vou poder comparecer."],["Let me know if you have any questions.","Me avise se tiver dúvidas."]],
+  items:[
+  {t:"build",pt:"Na minha opinião, devemos esperar.",ans:["In","my","opinion,","we","should","wait."],x:["at","waiting"]},
+  {t:"build",pt:"Entendo seu ponto, mas discordo.",ans:["I","see","your","point,","but","I","disagree."],x:["you","agree"]},
+  {t:"type",pt:"Escrevo para confirmar a reunião.",acc:["i'm writing to confirm the meeting","i am writing to confirm the meeting","i'm writing to confirm our meeting","i am writing to confirm our meeting"],show:"I'm writing to confirm the meeting."},
+  {t:"build",pt:"Trabalho com vendas há oito anos.",ans:["I've","worked","in","sales","for","eight","years."],x:["since","work"]},
+  {t:"type",pt:"Não vou poder comparecer à reunião.",acc:["i won't be able to attend the meeting","i will not be able to attend the meeting","i can't attend the meeting","i cannot attend the meeting","i won't be able to come to the meeting","i can't come to the meeting","i'm not able to attend the meeting","i won't be able to make the meeting","i can't make the meeting"],show:"I won't be able to attend the meeting."},
+  {t:"build",pt:"Me avise se tiver alguma dúvida.",ans:["Let","me","know","if","you","have","any","questions."],x:["say","doubts"]},
+ ]},
+ listen:{chunks:[["Let's get started.","Vamos começar."],["Can you walk me through it?","Pode me explicar passo a passo?"],["We're running out of time.","Estamos ficando sem tempo."],["I'll follow up by email.","Vou dar seguimento por e-mail."],["That's a good question.","Boa pergunta."],["Where do you see yourself in five years?","Onde você se vê daqui a cinco anos?"]],
+  items:[
+  {t:"listen",say:"Let's get started.",q:"O que você ouviu?",o:["Let's get started.","Let's get it done.","Let's get some tea.","Let's get there."],a:0},
+  {t:"listen",say:"Can you walk me through it?",q:"O que a pessoa pediu?",o:["Que explique passo a passo","Que caminhe com ela","Que entregue o documento","Que leia em voz alta"],a:0,mean:true},
+  {t:"listen",say:"We're running out of time.",q:"O que a pessoa disse?",o:["Estamos ficando sem tempo","Estamos correndo lá fora","Estamos adiantados","O tempo vai fechar"],a:0,mean:true},
+  {t:"lbuild",say:"I'll follow up by email.",ans:["I'll","follow","up","by","email."],x:["fallow","for"]},
+  {t:"listen",say:"That's a good question.",q:"O que você ouviu?",o:["That's a good question.","That's a good suggestion.","That was a good question.","That's a hard question."],a:0},
+  {t:"lbuild",say:"Where do you see yourself in five years?",ans:["Where","do","you","see","yourself","in","five","years?"],x:["are","yourselves"]},
+ ]},
+ speak:{chunks:[["In my opinion, we should wait.","Na minha opinião, devemos esperar."],["I see your point, but I disagree.","Entendo seu ponto, mas discordo."],["I'm writing to confirm the meeting.","Escrevo para confirmar a reunião."],["My main strength is sales.","Meu ponto forte são as vendas."],["I'll follow up by email.","Vou dar seguimento por e-mail."],["Let's get started.","Vamos começar."]],
+  items:[
+  {t:"speak",en:"In my opinion, we should wait.",pt:"Na minha opinião, devemos esperar.",pr:"in mái opínion, uí xúd uêit"},
+  {t:"speak",en:"I see your point, but I disagree.",pt:"Entendo seu ponto, mas discordo.",pr:"ái sí iór póint, bât ái disagrí"},
+  {t:"speak",en:"I'm writing to confirm the meeting.",pt:"Escrevo para confirmar a reunião.",pr:"áim ráitin tu confârm dâ mítin"},
+  {t:"speak",en:"My main strength is sales.",pt:"Meu ponto forte são as vendas.",pr:"mái mêin stréngth iz sêiolz",tip:"Termine “strength” com a língua entre os dentes, soprando."},
+  {t:"speak",en:"I'll follow up by email.",pt:"Vou dar seguimento por e-mail.",pr:"áil fólou âp bái ímeil"},
+  {t:"speak",en:"Let's get started.",pt:"Vamos começar.",pr:"léts guét stártid"},
+ ]},
+}},
+];
+
+const MODULES=[
+ {title:"Módulo 1",tag:"Base",sub:"Verbo to be, presente e pedidos do dia a dia, em frases curtas.",levels:LEVELS},
+ {title:"Módulo 2",tag:"Avançando",sub:"Passado, futuro, comparações e diálogos mais longos nos mesmos ambientes.",levels:LEVELS2},
+];
+/* stars: pass with total-2 right answers (3 of 5, 4 of 6); all right = 3 stars */
+const starsFor=(c,n)=>Math.max(0,Math.min(3,c-(n-3)));
+const passFor=n=>n-2;
+
+/* shuffle answer options once per load, keeping the right one */
+MODULES.forEach(Md=>Md.levels.forEach(L=>SKILLS.forEach(s=>L.phases[s.key].items.forEach(it=>{if(it.o){const right=it.o[it.a];it.o=shuffle(it.o.slice());it.a=it.o.indexOf(right);}}))));
+
+const RANKS=[[0,"Iniciante"],[200,"Em evolução"],[500,"Conversador"],[900,"Confiante"],[1400,"Comunicador"],[2100,"Fluente"]];
 const DAILY_GOAL=60;
 
 /* ---------- users: each one has their own area ----------
    The password is never written here, only a scrambled code (SHA-256 of "ingles-acelerado|usuario|senha").
    New user: node scripts/novo-usuario.js "Nome" "senha" and paste the line below. */
 const USERS=[
- {id:"rafael",name:"Rafael Veiga",hash:"3f3691b1e6dffb53737187628b3b4e9dab4d24f51cd6a54fa350396bbe75545f"},
+ {id:"rafael",name:"Rafael Veiga",admin:true,hash:"3f3691b1e6dffb53737187628b3b4e9dab4d24f51cd6a54fa350396bbe75545f"},
 ];
 const normUser=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().trim().replace(/\s+/g," ");
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
@@ -512,7 +740,8 @@ let USER=null;
 const KEY="ingles-acelerado-v1";
 const blank=()=>({xp:0,stars:{},streak:0,last:"",today:{d:"",xp:0}});
 let S=blank();
-function loadState(){S=blank();try{const raw=localStorage.getItem(KEY+":"+USER.id);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}touchDay();}
+function loadState(){S=blank();try{const raw=localStorage.getItem(KEY+":"+USER.id);if(raw)S=Object.assign(S,JSON.parse(raw));}catch(e){}touchDay();
+  M=+S.mod||0;if(!MODULES[M]||!moduleOpen(M))M=0;}
 function save(){if(!USER)return;try{localStorage.setItem(KEY+":"+USER.id,JSON.stringify(S));}catch(e){}}
 const dayStr=d=>d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate();
 const today=()=>dayStr(new Date());
@@ -520,7 +749,15 @@ function touchDay(){const t=today();if(S.today.d!==t)S.today={d:t,xp:0};}
 touchDay();
 function addXP(n){touchDay();S.xp+=n;S.today.xp+=n;const t=today();
   if(S.last!==t){const y=new Date();y.setDate(y.getDate()-1);S.streak=(S.last===dayStr(y))?S.streak+1:1;S.last=t;}save();}
-const sk=(l,s)=>l+"-"+s;
+/* modules: M is the open module. Module 1 keeps the original keys ("0-1"); Module 2 uses "m2:0-1" */
+let M=0;
+const LV=()=>MODULES[M].levels;
+const sk=(l,s)=>(M===0?"":"m"+(M+1)+":")+l+"-"+s;
+const starsM=(m,l,s)=>S.stars[(m===0?"":"m"+(m+1)+":")+l+"-"+s]||0;
+const moduleStars=m=>MODULES[m].levels.reduce((a,L,l)=>a+SKILLS.reduce((b,s,i)=>b+starsM(m,l,i),0),0);
+const moduleMax=m=>MODULES[m].levels.length*12;
+const moduleDone=m=>MODULES[m].levels.every((L,l)=>SKILLS.every((s,i)=>starsM(m,l,i)>0));
+const moduleOpen=m=>m===0||moduleDone(m-1)||!!(USER&&USER.admin);
 const starsOf=(l,s)=>S.stars[sk(l,s)]||0;
 const levelDone=l=>SKILLS.every((s,i)=>starsOf(l,i)>0);
 const levelOpen=l=>l===0||levelDone(l-1);
@@ -528,7 +765,7 @@ const phaseOpen=(l,s)=>levelOpen(l)&&(s===0||starsOf(l,s-1)>0);
 const levelStars=l=>SKILLS.reduce((a,s,i)=>a+starsOf(l,i),0);
 const rank=xp=>{let r=RANKS[0];RANKS.forEach(x=>{if(xp>=x[0])r=x;});return r;};
 const nextRank=xp=>RANKS.find(x=>x[0]>xp);
-function current(){for(let l=0;l<LEVELS.length;l++){if(!levelOpen(l))break;for(let s=0;s<4;s++){if(starsOf(l,s)===0)return [l,s];}}return null;}
+function current(){for(let l=0;l<LV().length;l++){if(!levelOpen(l))break;for(let s=0;s<4;s++){if(starsOf(l,s)===0)return [l,s];}}return null;}
 
 /* ---------- audio ---------- */
 const synth=window.speechSynthesis;let voice=null;
@@ -550,8 +787,8 @@ const ring=(pct,col)=>{const r=26,c=2*Math.PI*r;return `<svg class="ring" viewBo
 const home=document.getElementById("home");
 function renderHome(){
   touchDay();
-  const cur=current(),li=cur?cur[0]:LEVELS.length-1,L=LEVELS[li];
-  const totalStars=Object.values(S.stars).reduce((a,b)=>a+b,0),maxStars=LEVELS.length*12;
+  const LS=LV(),cur=current(),li=cur?cur[0]:LS.length-1,L=LS[li];
+  const totalStars=moduleStars(M),maxStars=moduleMax(M);
   const ls=levelStars(li),r=rank(S.xp),nr=nextRank(S.xp);
   const goal=Math.min(1,S.today.xp/DAILY_GOAL);
   const rankPct=nr?(S.xp-r[0])/(nr[0]-r[0]):1;
@@ -568,12 +805,19 @@ function renderHome(){
     </div>
     </div>
   </header>
+  <nav class="modules" aria-label="Módulos do curso">${MODULES.map((Md,m)=>{const open=moduleOpen(m),st=moduleStars(m),mx=moduleMax(m),free=m>0&&!moduleDone(m-1);
+    return `<button class="mod ${m===M?"on":""} ${open?"":"locked"}" data-m="${m}" ${open?"":"aria-disabled=\"true\""}>
+      <div class="mod-top"><span class="mod-num">${m+1}</span><div><div class="mod-title">${Md.title} <span class="mod-tag">${Md.tag}</span></div><div class="mod-sub">${Md.sub}</div></div>${open?"":`<span class="lock">${I.lock}</span>`}</div>
+      <div class="bar"><i style="width:${st/mx*100}%"></i></div>
+      <div class="mod-foot">${open?`<span class="mono">${st}/${mx} estrelas</span>${free?"<span>Liberado para você (administrador)</span>":m===M?"<span>Você está aqui</span>":"<span>Toque para abrir</span>"}`:`<span>Conclua o ${MODULES[m-1].title} para liberar</span>`}</div>
+    </button>`;}).join("")}</nav>
+  <p class="mod-msg" id="modmsg" role="status"></p>
   <section class="hero env-${li}">
     <div class="hero-main">
       <div class="big-ico" aria-hidden="true">${L.ico}</div>
-      <span class="pill">Nível ${li+1} de ${LEVELS.length} · inglês para adultos</span>
-      <div><h1 class="hero-title">${cur?L.env:"Curso concluído"}</h1>
-        <p class="hero-sub">${cur?L.sub:"Você passou por todos os ambientes. Refaça as fases para ganhar 3 estrelas em todas."}</p></div>
+      <span class="pill">${MODULES[M].title} · Nível ${li+1} de ${LS.length}</span>
+      <div><h1 class="hero-title">${cur?L.env:MODULES[M].title+" concluído"}</h1>
+        <p class="hero-sub">${cur?L.sub:(MODULES[M+1]?`Você passou por todos os ambientes. Abra o ${MODULES[M+1].title} acima ou refaça as fases para ganhar 3 estrelas.`:"Você passou por todos os ambientes. Refaça as fases para ganhar 3 estrelas em todas.")}</p></div>
       <div><div class="hero-meta"><span>${cur?"Próxima fase: "+SKILLS[cur[1]].name:"Tudo liberado"}</span><span class="mono">${ls}/12 estrelas</span></div>
         <div class="hbar" role="progressbar" aria-valuenow="${ls}" aria-valuemax="12"><i style="width:${ls/12*100}%"></i></div></div>
       <div class="hero-actions"><button class="btn white" id="go" ${cur?"":"disabled"}>${cur&&totalStars?"Continuar estudando":"Começar agora"}</button></div>
@@ -581,15 +825,15 @@ function renderHome(){
     <div class="side">
       <div class="tile-stat"><div class="ring-row">${ring(goal,"var(--gold)")}<div><div class="eyebrow">Meta de hoje</div><strong>${S.today.xp}/${DAILY_GOAL}</strong><div style="font-size:13px;color:var(--muted)">${goal>=1?"Meta batida!":"pontos"}</div></div></div></div>
       <div class="tile-stat"><div class="ring-row">${ring(rankPct,"var(--c-speak)")}<div><div class="eyebrow">${nr?"Próximo título":"Título máximo"}</div><strong>${nr?nr[1]:r[1]}</strong><div style="font-size:13px;color:var(--muted)">${nr?"faltam "+(nr[0]-S.xp)+" pontos":"Parabéns!"}</div></div></div></div>
-      <div class="tile-stat"><div class="ring-row">${ring(totalStars/maxStars,"var(--c-write)")}<div><div class="eyebrow">Curso todo</div><strong>${totalStars}/${maxStars}</strong><div style="font-size:13px;color:var(--muted)">estrelas</div></div></div></div>
+      <div class="tile-stat"><div class="ring-row">${ring(totalStars/maxStars,"var(--c-write)")}<div><div class="eyebrow">${MODULES[M].title}</div><strong>${totalStars}/${maxStars}</strong><div style="font-size:13px;color:var(--muted)">estrelas</div></div></div></div>
     </div>
   </section>
   <section class="method" aria-label="Como o curso funciona">
     <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--c-write)"></span>Método 1</div><h3>Blocos prontos (chunks)</h3><p>Cada fase começa com expressões inteiras, como "Can I try it on?". Você guarda o bloco e para de traduzir palavra por palavra.</p></div>
     <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--c-listen)"></span>Método 2</div><h3>Entender 70% a 80%</h3><p>Diálogos com áudio de situações reais. Tradução e legenda ficam escondidas: use só quando travar.</p></div>
-    <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--gold)"></span>Pontuação</div><h3>10 pontos por acerto</h3><p>Sem ajuda vale mais, 3 acertos seguidos dão bônus. Acerte 3 de 5 para passar de fase.</p></div>
+    <div class="mcard"><div class="eyebrow"><span class="dot" style="background:var(--gold)"></span>Pontuação</div><h3>10 pontos por acerto</h3><p>Sem ajuda vale mais, 3 acertos seguidos dão bônus. Para passar de fase: 3 de 5 no Módulo 1, 4 de 6 no Módulo 2.</p></div>
   </section>
-  ${LEVELS.map((Lv,l)=>{const open=levelOpen(l);return `
+  ${LS.map((Lv,l)=>{const open=levelOpen(l);return `
   <section class="level env-${l} ${open?"":"locked"}">
     <div class="level-band"><span class="l-ico">${Lv.ico}</span>
       <div class="l-txt"><div style="font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;opacity:.9">Nível ${l+1}${open?"":" · bloqueado"}</div><h2>Ambiente ${Lv.env}</h2><div class="l-sub">${Lv.sub}</div></div>
@@ -603,6 +847,9 @@ function renderHome(){
   <div class="foot-note"><span>Área de ${esc(USER.name)}. O progresso fica salvo neste aparelho.</span><button class="linkish" id="reset">Recomeçar do zero</button></div>`;
   const go=document.getElementById("go");if(go&&cur)go.onclick=()=>startPhase(cur[0],cur[1]);
   home.querySelectorAll(".gate").forEach(g=>g.onclick=()=>startPhase(+g.dataset.l,+g.dataset.s));
+  home.querySelectorAll(".mod").forEach(b=>b.onclick=()=>{const m=+b.dataset.m;
+    if(!moduleOpen(m)){document.getElementById("modmsg").textContent=`O ${MODULES[m].title} abre quando você concluir todas as fases do ${MODULES[m-1].title}.`;return;}
+    if(m===M)return;M=m;S.mod=m;save();renderHome();});
   const rs=document.getElementById("reset");let armed=false;
   rs.onclick=()=>{if(!armed){armed=true;rs.textContent="Toque de novo para apagar todo o progresso";setTimeout(()=>{armed=false;rs.textContent="Recomeçar do zero";},4000);return;}
     S=blank();touchDay();save();renderHome();};
@@ -647,7 +894,7 @@ function logout(){try{localStorage.removeItem(SESSION);}catch(x){}USER=null;S=bl
 const box=document.getElementById("lesson");
 let R=null;
 function startPhase(l,s){
-  R={l,s,P:LEVELS[l].phases[SKILLS[s].key],i:0,correct:0,combo:0,best:0,earned:0,help:false,picked:null,built:[],done:false,wasLevelDone:levelDone(l)};
+  R={l,s,P:LV()[l].phases[SKILLS[s].key],i:0,correct:0,combo:0,best:0,earned:0,help:false,picked:null,built:[],done:false,wasLevelDone:levelDone(l),wasModuleDone:moduleDone(M)};
   box.className="lesson env-"+l;box.style.setProperty("--sk",SKILLS[s].c);box.style.setProperty("--sk-soft",SKILLS[s].soft);
   box.hidden=false;document.body.style.overflow="hidden";renderIntro();
 }
@@ -659,14 +906,14 @@ function frame(body,foot,progress){
     <div class="l-foot" id="lf"><div class="l-foot-in" id="lfi">${foot}</div></div>`;
   document.getElementById("x").onclick=closeLesson;box.scrollTop=0;
 }
-const badges=()=>`<span class="skill-badge"><i>${SKILLS[R.s].ico}</i>${SKILLS[R.s].name}</span><span class="env-badge">Nível ${R.l+1} · ${LEVELS[R.l].env}</span>`;
+const badges=()=>`<span class="skill-badge"><i>${SKILLS[R.s].ico}</i>${SKILLS[R.s].name}</span><span class="env-badge">${MODULES[M].title} · Nível ${R.l+1} · ${LV()[R.l].env}</span>`;
 function renderIntro(){
   frame(`<div class="q-kind">${badges()}</div>
   <h2 class="q-title">Blocos prontos desta fase</h2>
   <p style="margin:0;color:var(--muted)">Ouça cada bloco e repita em voz alta duas vezes. Guarde a frase inteira e a situação em que ela é usada.</p>
   <div class="chunks">${R.P.chunks.map((c,i)=>`<div class="chunk"><button class="sp" data-i="${i}" aria-label="Ouvir ${esc(c[0])}">${I.sound}</button><div><div class="en">${esc(c[0])}</div><div class="pt">${esc(c[1])}</div></div></div>`).join("")}</div>
   <p class="note audio" hidden>O áudio não está disponível neste navegador. Leia os blocos em voz alta.</p>`,
-  `<div class="fb"><p style="color:var(--muted)">5 exercícios · acerte 3 para passar</p></div><button class="btn" id="startq">Começar fase</button>`,0);
+  `<div class="fb"><p style="color:var(--muted)">${R.P.items.length} exercícios · acerte ${passFor(R.P.items.length)} para passar</p></div><button class="btn" id="startq">Começar fase</button>`,0);
   box.querySelectorAll(".chunk .sp").forEach(b=>b.onclick=()=>say(R.P.chunks[+b.dataset.i][0]));
   document.getElementById("startq").onclick=renderItem;
 }
@@ -768,24 +1015,25 @@ function finish(ok,answer,it,skipped,practice){
   const n=document.getElementById("next");n.focus();n.onclick=()=>{R.i++;if(R.i<R.P.items.length)renderItem();else renderResult();};
 }
 function renderResult(){
-  const c=R.correct,stars=c>=5?3:c>=4?2:c>=3?1:0,prev=starsOf(R.l,R.s);
+  const n=R.P.items.length,c=R.correct,stars=starsFor(c,n),prev=starsOf(R.l,R.s);
   const bonus=Math.max(0,stars-prev)*15,total=R.earned+bonus;
   if(total>0)addXP(total);
   if(stars>prev){S.stars[sk(R.l,R.s)]=stars;save();}
-  const newLevel=levelDone(R.l)&&!R.wasLevelDone,L=LEVELS[R.l],nextL=LEVELS[R.l+1];
+  const newLevel=levelDone(R.l)&&!R.wasLevelDone,newModule=moduleDone(M)&&!R.wasModuleDone,L=LV()[R.l],nextL=LV()[R.l+1],nextM=MODULES[M+1];
   let title,sub;
-  if(stars===0){title="Ainda não foi desta vez";sub=`Você acertou ${c} de 5. Ouça os blocos de novo e tente outra vez: são precisos 3 acertos.`;}
-  else if(newLevel){title=`Nível ${R.l+1} concluído!`;sub=nextL?`Você dominou o ambiente ${L.env}. Liberado: Nível ${R.l+2}, ambiente ${nextL.env}.`:"Você completou todos os ambientes do curso.";}
+  if(stars===0){title="Ainda não foi desta vez";sub=`Você acertou ${c} de ${n}. Ouça os blocos de novo e tente outra vez: são precisos ${passFor(n)} acertos.`;}
+  else if(newModule){title=`${MODULES[M].title} concluído!`;sub=nextM?`Você passou pelos 5 ambientes. O ${nextM.title} está liberado: os mesmos ambientes, com conteúdo novo e um passo acima.`:"Você completou todos os módulos disponíveis. Novos módulos chegam em breve.";}
+  else if(newLevel){title=`Nível ${R.l+1} concluído!`;sub=nextL?`Você dominou o ambiente ${L.env}. Liberado: Nível ${R.l+2}, ambiente ${nextL.env}.`:"Você completou todos os ambientes deste módulo.";}
   else{title=stars===3?"Fase perfeita!":"Fase concluída!";sub=R.s<3?`Próxima fase liberada: ${SKILLS[R.s+1].name}.`:"Continue para fechar o nível.";}
   frame(`<div class="result">
-    ${newLevel?`<div class="seal"><i>${L.ico}</i>Selo ${L.env}</div>`:""}
+    ${newModule?`<div class="seal"><i>${I.badge}</i>Selo ${MODULES[M].title}</div>`:newLevel?`<div class="seal"><i>${L.ico}</i>Selo ${L.env}</div>`:""}
     <div class="big-stars">${[0,1,2].map(i=>star(i<stars,i<stars?"pop":"").replace('class="pop"',`class="pop" style="animation-delay:${i*.18}s"`)).join("")}</div>
     <h2 class="q-title">${title}</h2><p style="margin:0;color:var(--muted);max-width:46ch">${sub}</p>
-    <div class="res-grid"><div><strong>${c}/5</strong><span>acertos</span></div><div><strong>+${total}</strong><span>pontos</span></div><div><strong>${R.best}</strong><span>maior sequência</span></div></div>
+    <div class="res-grid"><div><strong>${c}/${n}</strong><span>acertos</span></div><div><strong>+${total}</strong><span>pontos</span></div><div><strong>${R.best}</strong><span>maior sequência</span></div></div>
     ${bonus?`<p class="note">Inclui +${bonus} pontos por estrelas novas.</p>`:""}
   </div>`,
   `<button class="btn ghost" id="again">Refazer fase</button><button class="btn ${stars?"":"ghost"}" id="cont">${stars?"Voltar aos níveis":"Voltar"}</button>`,100);
-  if(stars>0)confetti(newLevel?90:50);
+  if(stars>0)confetti(newModule?140:newLevel?90:50);
   document.getElementById("again").onclick=()=>startPhase(R.l,R.s);
   document.getElementById("cont").onclick=closeLesson;
 }
